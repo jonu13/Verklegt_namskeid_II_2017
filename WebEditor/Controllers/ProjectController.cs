@@ -33,8 +33,8 @@ namespace WebEditor.Controllers
             var project = new Project() { projectID = 1, name = "newProject" };
             var users = new List<User>
             {
-                new User { id=1, userName="Nafn1" },
-                new User { id=2, userName="Nafn2" }
+                new User { userID=1, userName="Nafn1" },
+                new User { userID=2, userName="Nafn2" }
             };
 
             var viewModel = new ProjectViewModel
