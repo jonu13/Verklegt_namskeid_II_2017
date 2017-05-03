@@ -203,6 +203,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Entities\Editor.cs" />
     <Compile Include="Models\Entities\Project.cs" />
     <Compile Include="Models\Entities\User.cs" />
     <Compile Include="Models\IdentityModels.cs" />
@@ -272,6 +273,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Project\ProjectList.cshtml" />
+    <Content Include="Views\Project\EditFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

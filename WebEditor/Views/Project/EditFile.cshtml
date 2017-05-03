@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "EditFile";
+}
+
+<h2>EditFile</h2>
+
+<style type="text/css" media="screen">
+	#editor {
+		position: relative;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		width: 80em;
+		height: 100em;
+	}
+</style>
+
+<div id="editor"><%=Model.Editor %></div>
+
+<script src="../../src/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	window.onload = function() {
+		var editor = ace.edit("editor");
+	};
+</script>

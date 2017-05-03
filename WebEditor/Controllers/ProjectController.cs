@@ -33,8 +33,8 @@ namespace WebEditor.Controllers
             var project = new Project() { id = 1, name = "newProject" };
             var users = new List<User>
             {
-                new User { userName="Nafn1" },
-                new User { userName="Nafn2" }
+                new User { id=1, userName="Nafn1" },
+                new User { id=2, userName="Nafn2" }
             };
 
             var viewModel = new ProjectViewModel
@@ -46,8 +46,8 @@ namespace WebEditor.Controllers
             return View(viewModel);
         }
 
-        public ActionResult Edit(int id) {
-            return Content("id=" + id);
+        public ActionResult EditFile(int? id) {
+            return View(id);
         }
     }
 }
