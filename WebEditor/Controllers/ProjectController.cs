@@ -30,7 +30,7 @@ namespace WebEditor.Controllers
 
         public ActionResult ProjectList() {
             //var viewModel = _service.getProjectById(id);
-            var project = new Project() { id = 1, name = "newProject" };
+            var project = new Project() { projectID = 1, name = "newProject" };
             var users = new List<User>
             {
                 new User { id=1, userName="Nafn1" },

@@ -5,12 +5,11 @@ using System.Web;
 
 namespace WebEditor.Models.Entities
 {
-    /// <summary>
-    /// Project contains info about a specific project a user has created
-    /// </summary>
-    public class Project
+    public class File
     {
+        public int fileID { get; set; }
+        public string fileName { get; set; }
+        public string content { get; set; }
         public int projectID { get; set; }
-        public string name { get; set; }
     }
 }

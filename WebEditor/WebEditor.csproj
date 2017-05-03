@@ -204,6 +204,8 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Entities\Editor.cs" />
+    <Compile Include="Models\Entities\ProjectUserConnector.cs" />
+    <Compile Include="Models\Entities\File.cs" />
     <Compile Include="Models\Entities\Project.cs" />
     <Compile Include="Models\Entities\User.cs" />
     <Compile Include="Models\IdentityModels.cs" />
