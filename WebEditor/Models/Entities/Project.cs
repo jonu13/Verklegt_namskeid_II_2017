@@ -12,5 +12,6 @@ namespace WebEditor.Models.Entities
     {
         public int id { get; set; }
         public string name { get; set; }
+        public List<File> files { get; set; }
     }
 }
