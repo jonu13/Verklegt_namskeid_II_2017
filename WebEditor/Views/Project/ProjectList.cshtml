@@ -21,18 +21,26 @@
 	</div>
 </div>
 
-<h2>@Model.project.name</h2>
+<h2>Your Projects</h2>
 
-@if (Model.users.Count == 0)
+@if (Model.projects.Count == 0)
 {
-	<p>No user</p>
+	<p>No projects</p>
 }
 else
 {
 	<ul>
-		@foreach (var user in Model.users)
+		@foreach (var project in Model.projects)
 		{
-			<li>@Html.ActionLink(@user.userName, "EditFile", "Project", new { id = user.id }, null)</li>
+			<li>
+				@project.name
+				<ul>
+					@foreach (var file in project.files)
+					{
+						<li>@Html.ActionLink(@file.fileName, "EditFile", "Project", new { id = file.fileID }, null)</li>
+					}
+				</ul>
+			</li>
 		}
 	</ul>
 }

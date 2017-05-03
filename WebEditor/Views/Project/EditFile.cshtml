@@ -1,9 +1,9 @@
-﻿
+﻿@model WebEditor.Models.Entities.File
 @{
     ViewBag.Title = "EditFile";
 }
 
-<h2>EditFile</h2>
+<h2>FileName: @Model.fileName</h2>
 
 <style type="text/css" media="screen">
 	#editor {
@@ -17,7 +17,7 @@
 	}
 </style>
 
-<div id="editor"><%=Model.Editor %></div>
+<div id="editor">@Model.content</div>
 
 <script src="../../src/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
