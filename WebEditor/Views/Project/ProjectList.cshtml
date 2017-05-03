@@ -1,0 +1,20 @@
+﻿@model WebEditor.Models.ViewModels.ProjectViewModel
+@{
+    ViewBag.Title = "ProjectList";
+}
+
+<h2>@Model.project.name</h2>
+
+@if (Model.users.Count == 0)
+{
+	<p>No user</p>
+}
+else
+{
+	<ul>
+		@foreach (var user in Model.users)
+		{
+			<li>@user.userName</li>
+		}
+	</ul>
+}
