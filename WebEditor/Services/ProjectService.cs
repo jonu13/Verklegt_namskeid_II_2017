@@ -23,18 +23,16 @@ namespace WebEditor.Services
         public List<int> getProjectIdsByUserId(int userId)
         {
             var projectsIds = from p in _db.projectUserConnectors
-                               where p.userId == userId
-                               select p.projectId;
+                              where p.userId == userId
+                              select p.projectID;
             return projectsIds.ToList();
         }
 
-        public List<Project> getProjectsByProjectId(int userId)
+        public List<Project> getProjectsFromIdList(List<int> projIds)
         {
-            var projectsIds = from p in _db.projectUserConnectors
-                              where p.userId == userId
-                              select p.projectId;
-
-            return projectsById.ToList();
+            var projects = _db.projects.Where(p => projIds.Contains(p.projectID));
+            
+            return projects.ToList();
         }
 
         public List<File> getFilesByProjectId(int id)
@@ -43,6 +41,13 @@ namespace WebEditor.Services
                                    where f.projectID == id
                                    select f;
             return filesById.ToList();
+        }
+        
+        public File getFileById(int id)
+        {
+            var file = _db.files.First(f => f.fileID == id);
+
+            return file;
         }
         /*
         public ProjectViewModel getProjectById(int projectId) {

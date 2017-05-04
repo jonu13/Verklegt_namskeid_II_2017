@@ -35,43 +35,18 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
-            List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static breyta fyrir userId
-            //List<Project> userProjects = null;
+            List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
+            List<Project> userProjects = _service.getProjectsFromIdList(projectIdList);
+            foreach(var project in userProjects)
+            {
+                project.files = _service.getFilesByProjectId(project.projectID);
+            }
             
-            return View(projectIdList);
-
-            //var viewModel = _service.getProjectById(id);
-            /*
-            var projects = new List<Project>
-            {
-                new Project { projectID=1, name="Project 1", files=fileList1 },
-                new Project { projectID=2, name="Project 2", files=fileList1 }
-            };
-
-            var users = new List<User>
-            {
-                new User { userID=1, userName="Nafn1" },
-                new User { userID=2, userName="Nafn2" }
-            };
-
-            var viewModel = new ProjectViewModel
-            {
-                projects = projects
-            };
-
-            return View(viewModel);
-            */
+            return View(userProjects);
         }
 
-        public ActionResult EditFile(int? id) {
-            File fileToEdit = new File { };
-            for(int i = 0; i < fileList1.Count; i++)
-            {
-                if(fileList1[i].fileID == id)
-                {
-                    fileToEdit = fileList1[i];
-                }
-            }
+        public ActionResult EditFile(int id) {
+            File fileToEdit = _service.getFileById(id);
             return View(fileToEdit);
         }
     }
