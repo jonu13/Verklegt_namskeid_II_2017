@@ -23,8 +23,16 @@
 
 <h2>Your Projects</h2>
 <ul>
-    @for(int i = 0; i < Model.Count; i++)
-    {
-        <li>@Model[i].name</li>
+        @foreach (var project in Model)
+        {
+            <li>
+                @project.name
+                <ul>
+                    @foreach (var file in project.files)
+                    {
+                        <li>@Html.ActionLink(@file.fileName, "EditFile", "Project", new { id = file.fileID }, null)</li>
+                    }
+                </ul>
+        </li>
     }
 </ul>

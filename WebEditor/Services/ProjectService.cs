@@ -16,10 +16,16 @@ namespace WebEditor.Services
             _db = new ApplicationDbContext();
         }
 
-        public List<ProjectViewModel> getAllProjects() {
-            //List<ProjectViewModel> prList;
-            //prList = _db.projects.ToList();
-            return null;
+        public List<Project> getAllProjects() {
+            return _db.projects.ToList();
+        }
+
+        public List<File> getFilesByProjectId(int id)
+        {
+            var filesById = from f in _db.files
+                                   where f.projectID == id
+                                   select f;
+            return filesById.ToList();
         }
         /*
         public ProjectViewModel getProjectById(int projectId) {

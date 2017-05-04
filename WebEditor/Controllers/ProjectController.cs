@@ -36,7 +36,12 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
-            return View(_db.projects.ToList());
+            List<Project> allProjects = _service.getAllProjects();
+            foreach(var project in allProjects)
+            {
+                project.files = _service.getFilesByProjectId(project.projectID);
+            }
+            return View(allProjects);
 
             //var viewModel = _service.getProjectById(id);
             /*

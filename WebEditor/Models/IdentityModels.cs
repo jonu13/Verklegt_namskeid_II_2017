@@ -23,7 +23,7 @@ namespace WebEditor.Models
     {
         public DbSet<Project> projects { get; set; }
         public DbSet<User> users { get; set; }
-        public DbSet<File> file { get; set; } 
+        public DbSet<File> files { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
