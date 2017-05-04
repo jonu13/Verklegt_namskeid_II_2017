@@ -9,6 +9,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebEditor.Models;
+using WebEditor.Services;
+
+
+using System.Collections.Generic;
+using WebEditor.Models.Entities;
+using WebEditor.Models.ViewModels;
 
 namespace WebEditor.Controllers
 {
@@ -17,6 +23,8 @@ namespace WebEditor.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private UserService _userService = new UserService();
+        private ApplicationDbContext _db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -149,14 +157,31 @@ namespace WebEditor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            System.Diagnostics.Debug.WriteLine(model);
+            System.Diagnostics.Debug.WriteLine(ModelState);
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                bool isString = false;
+                if (model.Email is string)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    if(model.Password is string)
+                    {
+                        isString = true;
+                    }
+                }
+
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, };
+                //var result = await UserManager.CreateAsync(user, model.Password);
+                if (isString)
+                {
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
+                    User tempUser = new User();
+                    tempUser.userName = model.Email;
+                    tempUser.password = model.Password;
+                    _db.users.Add(tempUser);
+                    _db.SaveChanges();
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
