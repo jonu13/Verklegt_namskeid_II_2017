@@ -12,7 +12,6 @@ namespace WebEditor.Controllers
 {
     public class ProjectController : Controller
     {
-        private ApplicationDbContext _db = new ApplicationDbContext();
         private ProjectService _service = new ProjectService();
         List<File> fileList1 = new List<File>
         {
@@ -36,12 +35,10 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
-            List<Project> allProjects = _service.getAllProjects();
-            foreach(var project in allProjects)
-            {
-                project.files = _service.getFilesByProjectId(project.projectID);
-            }
-            return View(allProjects);
+            List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static breyta fyrir userId
+            //List<Project> userProjects = null;
+            
+            return View(projectIdList);
 
             //var viewModel = _service.getProjectById(id);
             /*
