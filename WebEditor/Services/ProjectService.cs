@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebEditor.Models;
+using WebEditor.Models.Entities;
 
 namespace WebEditor.Services
 {
@@ -15,8 +16,9 @@ namespace WebEditor.Services
             _db = new ApplicationDbContext();
         }
 
-        public List<ProjectViewModel> getUserProjects(int userId) {
-            // TODO
+        public List<ProjectViewModel> getAllProjects() {
+            //List<ProjectViewModel> prList;
+            //prList = _db.projects.ToList();
             return null;
         }
         /*

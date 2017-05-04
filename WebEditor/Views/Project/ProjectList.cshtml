@@ -1,4 +1,4 @@
-﻿@model WebEditor.Models.ViewModels.ProjectViewModel
+﻿@model List<WebEditor.Models.Entities.Project>
 @{
     ViewBag.Title = "ProjectList";
 }
@@ -22,25 +22,9 @@
 </div>
 
 <h2>Your Projects</h2>
-
-@if (Model.projects.Count == 0)
-{
-	<p>No projects</p>
-}
-else
-{
-	<ul>
-		@foreach (var project in Model.projects)
-		{
-			<li>
-				@project.name
-				<ul>
-					@foreach (var file in project.files)
-					{
-						<li>@Html.ActionLink(@file.fileName, "EditFile", "Project", new { id = file.fileID }, null)</li>
-					}
-				</ul>
-			</li>
-		}
-	</ul>
-}
+<ul>
+    @for(int i = 0; i < Model.Count; i++)
+    {
+        <li>@Model[i].name</li>
+    }
+</ul>

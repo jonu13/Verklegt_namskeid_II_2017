@@ -6,12 +6,14 @@ using System.Web.Mvc;
 using WebEditor.Services;
 using WebEditor.Models.Entities;
 using WebEditor.Models.ViewModels;
+using WebEditor.Models;
 
 namespace WebEditor.Controllers
 {
     public class ProjectController : Controller
     {
-        //private ProjectService _service = new ProjectService();
+        private ApplicationDbContext _db = new ApplicationDbContext();
+        private ProjectService _service = new ProjectService();
         List<File> fileList1 = new List<File>
         {
             new File { fileID=1, fileName="File1", content="ablabsleicanseilbf" },
@@ -34,7 +36,10 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
+            return View(_db.projects.ToList());
+
             //var viewModel = _service.getProjectById(id);
+            /*
             var projects = new List<Project>
             {
                 new Project { projectID=1, name="Project 1", files=fileList1 },
@@ -53,6 +58,7 @@ namespace WebEditor.Controllers
             };
 
             return View(viewModel);
+            */
         }
 
         public ActionResult EditFile(int? id) {
