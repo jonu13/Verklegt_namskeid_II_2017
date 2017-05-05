@@ -57,6 +57,16 @@ namespace WebEditor.Services
 			_db.projects.Add(newProject);
 			_db.SaveChanges();
 		}
+
+		public void WriteNewFileToDataBase(string fileName, int projectID)
+		{
+			File newFile = new File();
+			newFile.fileName = fileName;
+			newFile.projectID = projectID;
+			newFile.content = "";
+			_db.files.Add(newFile);
+			_db.SaveChanges();
+		}
         /*
         public ProjectViewModel getProjectById(int projectId) {
             var project = _db.projects.SingleOrDefault(x => x.id == projectId);
