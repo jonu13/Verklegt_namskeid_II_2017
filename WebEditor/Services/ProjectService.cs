@@ -67,7 +67,17 @@ namespace WebEditor.Services
 			_db.files.Add(newFile);
 			_db.SaveChanges();
 		}
-        /*
+
+		public void addUserToProject(int projectID, int userID)
+		{
+			ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
+			newUserProjectConnection.projectID = projectID;
+			newUserProjectConnection.userId = userID;
+			newUserProjectConnection.role = "";
+			_db.projectUserConnectors.Add(newUserProjectConnection);
+			_db.SaveChanges();
+		}
+		/*
         public ProjectViewModel getProjectById(int projectId) {
             var project = _db.projects.SingleOrDefault(x => x.id == projectId);
 
@@ -84,5 +94,5 @@ namespace WebEditor.Services
 
             return viewModel;
         }*/
-    }
+	}
 }
