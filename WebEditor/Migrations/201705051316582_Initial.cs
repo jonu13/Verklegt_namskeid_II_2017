@@ -3,7 +3,7 @@ namespace WebEditor.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class hallo : DbMigration
+    public partial class Initial : DbMigration
     {
         public override void Up()
         {
@@ -30,6 +30,17 @@ namespace WebEditor.Migrations
                 .PrimaryKey(t => t.projectID);
             
             CreateTable(
+                "dbo.ProjectUserConnectors",
+                c => new
+                    {
+                        connectorID = c.Int(nullable: false, identity: true),
+                        userId = c.Int(nullable: false),
+                        projectID = c.Int(nullable: false),
+                        role = c.String(),
+                    })
+                .PrimaryKey(t => t.connectorID);
+            
+            CreateTable(
                 "dbo.AspNetRoles",
                 c => new
                     {
@@ -51,16 +62,6 @@ namespace WebEditor.Migrations
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId)
                 .Index(t => t.RoleId);
-            
-            CreateTable(
-                "dbo.Users",
-                c => new
-                    {
-                        userID = c.Int(nullable: false, identity: true),
-                        userName = c.String(),
-                        password = c.String(),
-                    })
-                .PrimaryKey(t => t.userID);
             
             CreateTable(
                 "dbo.AspNetUsers",
@@ -106,7 +107,6 @@ namespace WebEditor.Migrations
                 .PrimaryKey(t => new { t.LoginProvider, t.ProviderKey, t.UserId })
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
-            
         }
         
         public override void Down()
@@ -126,9 +126,9 @@ namespace WebEditor.Migrations
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
-            DropTable("dbo.Users");
             DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetRoles");
+            DropTable("dbo.ProjectUserConnectors");
             DropTable("dbo.Projects");
             DropTable("dbo.Files");
         }

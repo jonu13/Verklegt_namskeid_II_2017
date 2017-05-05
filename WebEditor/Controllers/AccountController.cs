@@ -9,12 +9,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebEditor.Models;
-using WebEditor.Services;
-
-
-using System.Collections.Generic;
-using WebEditor.Models.Entities;
-using WebEditor.Models.ViewModels;
 
 namespace WebEditor.Controllers
 {
@@ -23,14 +17,12 @@ namespace WebEditor.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private UserService _userService = new UserService();
-        private ApplicationDbContext _db = new ApplicationDbContext();
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -42,9 +34,9 @@ namespace WebEditor.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -128,7 +120,7 @@ namespace WebEditor.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -157,30 +149,13 @@ namespace WebEditor.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            System.Diagnostics.Debug.WriteLine(model);
-            System.Diagnostics.Debug.WriteLine(ModelState);
             if (ModelState.IsValid)
             {
-                bool isString = false;
-                if (model.Email is string)
-                {
-                    if(model.Password is string)
-                    {
-                        isString = true;
-                    }
-                }
-
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                if (isString)
+                if (result.Succeeded)
                 {
-                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-
-                    User tempUser = new User();
-                    tempUser.userName = model.Email;
-                    tempUser.password = model.Password;
-                    _db.users.Add(tempUser);
-                    _db.SaveChanges();
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link

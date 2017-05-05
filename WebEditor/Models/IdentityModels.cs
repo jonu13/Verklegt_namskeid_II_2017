@@ -22,7 +22,6 @@ namespace WebEditor.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Project> projects { get; set; }
-        public DbSet<User> users { get; set; }
         public DbSet<File> files { get; set; }
         public DbSet<ProjectUserConnectors> projectUserConnectors { get; set; }
 

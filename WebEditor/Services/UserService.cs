@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using WebEditor.Models;
+using WebEditor.Models.Entities;
 
 namespace WebEditor.Services
 {
