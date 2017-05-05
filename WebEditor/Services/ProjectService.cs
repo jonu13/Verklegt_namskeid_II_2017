@@ -49,6 +49,14 @@ namespace WebEditor.Services
 
             return file;
         }
+
+		public void writeNewProjectToDataBase(string projectName)
+		{	
+			Project newProject = new Project();
+			newProject.name = projectName;
+			_db.projects.Add(newProject);
+			_db.SaveChanges();
+		}
         /*
         public ProjectViewModel getProjectById(int projectId) {
             var project = _db.projects.SingleOrDefault(x => x.id == projectId);
