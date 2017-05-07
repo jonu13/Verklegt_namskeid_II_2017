@@ -30,6 +30,7 @@ namespace WebEditor.Controllers
             {
                 sortBy = "Name";
             }
+            var diff = User.Identity.Name;
 
             return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
         }

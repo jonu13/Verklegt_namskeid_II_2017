@@ -30,40 +30,6 @@ namespace WebEditor.Migrations
                 .PrimaryKey(t => t.projectID);
             
             CreateTable(
-                "dbo.ProjectUserConnectors",
-                c => new
-                    {
-                        connectorID = c.Int(nullable: false, identity: true),
-                        userId = c.Int(nullable: false),
-                        projectID = c.Int(nullable: false),
-                        role = c.String(),
-                    })
-                .PrimaryKey(t => t.connectorID);
-            
-            CreateTable(
-                "dbo.AspNetRoles",
-                c => new
-                    {
-                        Id = c.String(nullable: false, maxLength: 128),
-                        Name = c.String(nullable: false, maxLength: 256),
-                    })
-                .PrimaryKey(t => t.Id)
-                .Index(t => t.Name, unique: true, name: "RoleNameIndex");
-            
-            CreateTable(
-                "dbo.AspNetUserRoles",
-                c => new
-                    {
-                        UserId = c.String(nullable: false, maxLength: 128),
-                        RoleId = c.String(nullable: false, maxLength: 128),
-                    })
-                .PrimaryKey(t => new { t.UserId, t.RoleId })
-                .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
-                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId)
-                .Index(t => t.RoleId);
-            
-            CreateTable(
                 "dbo.AspNetUsers",
                 c => new
                     {
@@ -79,9 +45,12 @@ namespace WebEditor.Migrations
                         LockoutEnabled = c.Boolean(nullable: false),
                         AccessFailedCount = c.Int(nullable: false),
                         UserName = c.String(nullable: false, maxLength: 256),
+                        project_projectID = c.Int(),
                     })
                 .PrimaryKey(t => t.Id)
-                .Index(t => t.UserName, unique: true, name: "UserNameIndex");
+                .ForeignKey("dbo.Projects", t => t.project_projectID)
+                .Index(t => t.UserName, unique: true, name: "UserNameIndex")
+                .Index(t => t.project_projectID);
             
             CreateTable(
                 "dbo.AspNetUserClaims",
@@ -107,28 +76,66 @@ namespace WebEditor.Migrations
                 .PrimaryKey(t => new { t.LoginProvider, t.ProviderKey, t.UserId })
                 .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
                 .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.AspNetUserRoles",
+                c => new
+                    {
+                        UserId = c.String(nullable: false, maxLength: 128),
+                        RoleId = c.String(nullable: false, maxLength: 128),
+                    })
+                .PrimaryKey(t => new { t.UserId, t.RoleId })
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetRoles", t => t.RoleId, cascadeDelete: true)
+                .Index(t => t.UserId)
+                .Index(t => t.RoleId);
+            
+            CreateTable(
+                "dbo.ProjectUserConnectors",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        userId = c.String(),
+                        userName = c.String(),
+                        projectId = c.Int(nullable: false),
+                        role = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.AspNetRoles",
+                c => new
+                    {
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Name = c.String(nullable: false, maxLength: 256),
+                    })
+                .PrimaryKey(t => t.Id)
+                .Index(t => t.Name, unique: true, name: "RoleNameIndex");
+            
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
-            DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.Files", "projectID", "dbo.Projects");
-            DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
-            DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
-            DropIndex("dbo.AspNetUsers", "UserNameIndex");
+            DropForeignKey("dbo.AspNetUserRoles", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUsers", "project_projectID", "dbo.Projects");
+            DropForeignKey("dbo.AspNetUserLogins", "UserId", "dbo.AspNetUsers");
+            DropForeignKey("dbo.AspNetUserClaims", "UserId", "dbo.AspNetUsers");
+            DropIndex("dbo.AspNetRoles", "RoleNameIndex");
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
-            DropIndex("dbo.AspNetRoles", "RoleNameIndex");
+            DropIndex("dbo.AspNetUserLogins", new[] { "UserId" });
+            DropIndex("dbo.AspNetUserClaims", new[] { "UserId" });
+            DropIndex("dbo.AspNetUsers", new[] { "project_projectID" });
+            DropIndex("dbo.AspNetUsers", "UserNameIndex");
             DropIndex("dbo.Files", new[] { "projectID" });
+            DropTable("dbo.AspNetRoles");
+            DropTable("dbo.ProjectUserConnectors");
+            DropTable("dbo.AspNetUserRoles");
             DropTable("dbo.AspNetUserLogins");
             DropTable("dbo.AspNetUserClaims");
             DropTable("dbo.AspNetUsers");
-            DropTable("dbo.AspNetUserRoles");
-            DropTable("dbo.AspNetRoles");
-            DropTable("dbo.ProjectUserConnectors");
             DropTable("dbo.Projects");
             DropTable("dbo.Files");
         }

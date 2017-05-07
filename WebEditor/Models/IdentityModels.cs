@@ -17,6 +17,7 @@ namespace WebEditor.Models
             // Add custom user claims here
             return userIdentity;
         }
+        public virtual Project project { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

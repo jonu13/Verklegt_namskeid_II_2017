@@ -23,10 +23,18 @@ namespace WebEditor.Services
         public List<int> getProjectIdsByUserId(int userId)
         {
             var projectsIds = from p in _db.projectUserConnectors
-                              where p.userId == userId
-                              select p.projectID;
+                              where p.Id == userId
+                              select p.projectId;
             return projectsIds.ToList();
         }
+
+        /*public List<int> getProjectIdsByUserName(string userName)
+        {
+            var projectsIds = from p in _db.projectUserConnectors
+                              where p.UserName == userName
+                              select p.projectID;
+            return projectsIds.ToList();
+        }*/
 
         public List<Project> getProjectsFromIdList(List<int> projIds)
         {
@@ -71,8 +79,8 @@ namespace WebEditor.Services
 		public void addUserToProject(int projectID, int userID)
 		{
 			ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
-			newUserProjectConnection.projectID = projectID;
-			newUserProjectConnection.userId = userID;
+			newUserProjectConnection.projectId = projectID;
+			newUserProjectConnection.Id = userID;
 			newUserProjectConnection.role = "";
 			_db.projectUserConnectors.Add(newUserProjectConnection);
 			_db.SaveChanges();

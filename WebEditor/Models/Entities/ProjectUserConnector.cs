@@ -8,10 +8,10 @@ namespace WebEditor.Models.Entities
 {
     public class ProjectUserConnectors
     {
-        [Key]
-        public int connectorID { get; set; }
-        public int userId { get; set; }
-        public int projectID { get; set; }
+        public int Id { get; set; }
+        public string userId { get; set; }
+        public string userName { get; set; }
+        public int projectId { get; set; }
         public string role { get; set; }
     }
 }

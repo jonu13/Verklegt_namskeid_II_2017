@@ -13,7 +13,7 @@ namespace WebEditor.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201705051316582_Initial"; }
+            get { return "201705061912543_Initial"; }
         }
         
         string IMigrationMetadata.Source
