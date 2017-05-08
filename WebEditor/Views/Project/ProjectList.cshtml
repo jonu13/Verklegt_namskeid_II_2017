@@ -27,6 +27,7 @@
         {
             <li>
                 @project.name
+                @Html.ActionLink("Create a new file", "CreateNewFile", new { projectID = project.projectID }, new { @class = "btn btn-primary btn-xs" })
                 <ul>
                     @foreach (var file in project.files)
                     {

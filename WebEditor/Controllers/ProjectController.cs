@@ -81,5 +81,15 @@ namespace WebEditor.Controllers
 			//return View(model);
 		}
 
+		public ActionResult CreateNewFile(int projectID)
+		{
+			File model = new File();
+			model.content = "";
+			model.projectID = projectID;
+
+			return View(model);
+		}
+
 	}
+
 }
