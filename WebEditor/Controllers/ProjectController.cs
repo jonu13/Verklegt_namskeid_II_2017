@@ -59,5 +59,27 @@ namespace WebEditor.Controllers
             _service.updateFile(model);
             return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
         }
-    }
+
+		[HttpGet]
+		public ActionResult CreateNewProject()
+		{
+			Project model = new Project();
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult CreateNewProject(Project model)
+		{
+			/*if(ModelState.IsValid)
+			{
+				_service.writeNewProjectToDataBase(model);
+				return RedirectToAction("ProjectList");
+			}*/
+
+			_service.writeNewProjectToDataBase(model, User.Identity.Name);
+			return RedirectToAction("ProjectList");
+			//return View(model);
+		}
+
+	}
 }
