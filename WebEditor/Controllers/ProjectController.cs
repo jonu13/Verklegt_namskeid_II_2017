@@ -39,13 +39,10 @@ namespace WebEditor.Controllers
             //List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
             var currentUser = User.Identity.Name;
             List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
-            List<Project> userProjects = _service.getProjectsFromIdList(projectIdList);
-            foreach(var project in userProjects)
-            {
-                project.files = _service.getFilesByProjectId(project.projectID);
-            }
+            var viewModel = _service.getProjectsFromIdList(projectIdList);
+            viewModel.connectors = _service.getProjectConnections(currentUser);
             
-            return View(userProjects);
+            return View(viewModel);
         }
 
         public ActionResult EditFile(int id) {
