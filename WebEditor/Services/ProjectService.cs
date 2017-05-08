@@ -59,13 +59,13 @@ namespace WebEditor.Services
         }
 
 		public void writeNewProjectToDataBase(Project newProject, string userName)
-		{	
+		{	// Adds newProject into table and also adds current user to that project.
+
 			if(newProject.name != null)
 			{
 				_db.projects.Add(newProject);
-				addUserToProject(newProject.projectID, userName);
 				_db.SaveChanges();
-
+				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName);
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace WebEditor.Services
 			newUserProjectConnection.projectId = projectID;
 			newUserProjectConnection.userName = userName;
 			newUserProjectConnection.role = "";
-			//newUserProjectConnection.userId = null;
+			newUserProjectConnection.userId = null;
 			
 			_db.projectUserConnectors.Add(newUserProjectConnection);
 			_db.SaveChanges();
