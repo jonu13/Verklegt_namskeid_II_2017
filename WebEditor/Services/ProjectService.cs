@@ -58,12 +58,15 @@ namespace WebEditor.Services
             return file;
         }
 
-		public void writeNewProjectToDataBase(string projectName)
+		public void writeNewProjectToDataBase(Project newProject, string userName)
 		{	
-			Project newProject = new Project();
-			newProject.name = projectName;
-			_db.projects.Add(newProject);
-			_db.SaveChanges();
+			if(newProject.name != null)
+			{
+				_db.projects.Add(newProject);
+				addUserToProject(newProject.projectID, userName);
+				_db.SaveChanges();
+
+			}
 		}
 
 		public void WriteNewFileToDataBase(string fileName, int projectID)
@@ -76,12 +79,14 @@ namespace WebEditor.Services
 			_db.SaveChanges();
 		}
 
-		public void addUserToProject(int projectID, int userID)
+		public void addUserToProject(int projectID, string userName)
 		{
 			ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
 			newUserProjectConnection.projectId = projectID;
-			newUserProjectConnection.Id = userID;
+			newUserProjectConnection.userName = userName;
 			newUserProjectConnection.role = "";
+			//newUserProjectConnection.userId = null;
+			
 			_db.projectUserConnectors.Add(newUserProjectConnection);
 			_db.SaveChanges();
 		}
