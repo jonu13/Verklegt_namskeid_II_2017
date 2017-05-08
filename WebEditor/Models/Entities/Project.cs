@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebEditor.Models.Entities
 {
@@ -11,6 +12,8 @@ namespace WebEditor.Models.Entities
     public class Project
     {
         public int projectID { get; set; }
+		[Display(Name = "Name of new project:")]
+		//[Required(ErrorMessage ="The project must have a name!")]
         public string name { get; set; }
         public List<File> files { get; set; }
     }
