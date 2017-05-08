@@ -69,12 +69,8 @@ namespace WebEditor.Services
 			}
 		}
 
-		public void WriteNewFileToDataBase(string fileName, int projectID)
+		public void WriteNewFileToDataBase(File newFile)
 		{
-			File newFile = new File();
-			newFile.fileName = fileName;
-			newFile.projectID = projectID;
-			newFile.content = "";
 			_db.files.Add(newFile);
 			_db.SaveChanges();
 		}
@@ -108,6 +104,16 @@ namespace WebEditor.Services
                 _db.SaveChanges();
             }
         }
+
+		public bool projectIsEmpty(int projectID)
+		{   
+			File tmpFile = _db.files.SingleOrDefault(x => x.projectID == projectID);
+			if(tmpFile == null)
+			{
+				return true;
+			}
+			return false;
+		}
 		/*
         public ProjectViewModel getProjectById(int projectId) {
             var project = _db.projects.SingleOrDefault(x => x.id == projectId);

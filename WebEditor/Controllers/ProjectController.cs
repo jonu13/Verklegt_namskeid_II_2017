@@ -64,6 +64,7 @@ namespace WebEditor.Controllers
 		public ActionResult CreateNewProject()
 		{
 			Project model = new Project();
+			model.projectFileType = "cpp";
 			return View(model);
 		}
 
@@ -75,21 +76,50 @@ namespace WebEditor.Controllers
 				_service.writeNewProjectToDataBase(model);
 				return RedirectToAction("ProjectList");
 			}*/
-
 			_service.writeNewProjectToDataBase(model, User.Identity.Name);
 			return RedirectToAction("ProjectList");
 			//return View(model);
 		}
 
+		public bool projectIsEmpty(int projectID)
+		{ 
+			return _service.projectIsEmpty(projectID);
+		}
+
+		[HttpGet]
 		public ActionResult CreateNewFile(int projectID)
 		{
 			File model = new File();
+
+			List<int> listOfOneProject = new List<int>(1);
+			listOfOneProject.Add(projectID);
+			string projectFileType = _service.getProjectsFromIdList(listOfOneProject).First().projectFileType;
+
 			model.content = "";
 			model.projectID = projectID;
+			model.fileType = projectFileType;
+			
+			if (projectIsEmpty(projectID))
+			{   // First file in project shall be index.someFileType
 
-			return View(model);
+				model.fileName = "index." + projectFileType;
+				_service.WriteNewFileToDataBase(model);
+				return RedirectToAction("ProjectList");
+			}
+			else
+			{	// Any additional file has to be named by user.
+
+				return View(model);
+			}
 		}
 
+		[HttpPost]
+		public ActionResult CreateNewFile(File model)
+		{
+			model.content = ""; // Because "" doesnt survive the view class.
+			_service.WriteNewFileToDataBase(model);
+			return RedirectToAction("ProjectList");
+		}
 	}
 
 }

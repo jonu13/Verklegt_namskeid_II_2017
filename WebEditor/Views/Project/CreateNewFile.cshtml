@@ -1,10 +1,6 @@
 ﻿@model WebEditor.Models.Entities.File
 
-@{
-    ViewBag.Title = "CreateNewFile";
-}
-
-<h2>CreateNewFile</h2>
+<h2>Create a new file</h2>
 
 
 @using (Html.BeginForm()) 
@@ -12,7 +8,6 @@
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>File</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -24,9 +19,25 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.projectID, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.HiddenFor(model => model.content, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.projectID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.HiddenFor(model => model.content, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.content, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.HiddenFor(model => model.fileType, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.fileType, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.fileType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.HiddenFor(model => model.projectID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.HiddenFor(model => model.projectID, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.projectID, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -40,7 +51,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "ProjectList")
+    @Html.ActionLink("Back to List", "Index")
 </div>
 
 @section Scripts {
