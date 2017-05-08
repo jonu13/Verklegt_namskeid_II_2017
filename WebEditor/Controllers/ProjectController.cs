@@ -40,8 +40,8 @@ namespace WebEditor.Controllers
             var currentUser = User.Identity.Name;
             List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
             var viewModel = _service.getProjectsFromIdList(projectIdList);
-            viewModel.connectors = _service.getProjectConnections(currentUser);
-            
+            viewModel.roles = _service.getRolesWithProjecList(currentUser, viewModel.projects);
+
             return View(viewModel);
         }
 
