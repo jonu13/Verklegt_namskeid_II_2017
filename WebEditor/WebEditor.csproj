@@ -282,6 +282,7 @@
     <Content Include="Views\Project\EditFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="3rdparty\ace\" />
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>

@@ -28,13 +28,13 @@ namespace WebEditor.Services
             return projectsIds.ToList();
         }
 
-        /*public List<int> getProjectIdsByUserName(string userName)
+        public List<int> getProjectIdsByUserName(string userName)
         {
             var projectsIds = from p in _db.projectUserConnectors
-                              where p.UserName == userName
-                              select p.projectID;
+                              where p.userName == userName
+                              select p.projectId;
             return projectsIds.ToList();
-        }*/
+        }
 
         public List<Project> getProjectsFromIdList(List<int> projIds)
         {
@@ -85,6 +85,17 @@ namespace WebEditor.Services
 			_db.projectUserConnectors.Add(newUserProjectConnection);
 			_db.SaveChanges();
 		}
+
+        public void updateFile(File updateFile)
+        {
+            var orginalFile = _db.files.Find(updateFile.fileID);
+
+            if(orginalFile != null)
+            {
+                _db.Entry(orginalFile).CurrentValues.SetValues(updateFile);
+                _db.SaveChanges();
+            }
+        }
 		/*
         public ProjectViewModel getProjectById(int projectId) {
             var project = _db.projects.SingleOrDefault(x => x.id == projectId);

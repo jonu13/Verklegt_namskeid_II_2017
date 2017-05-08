@@ -5,23 +5,29 @@
 
 <h2>FileName: @Model.fileName</h2>
 
-<style type="text/css" media="screen">
-	#editor {
-		position: relative;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		width: 80em;
-		height: 100em;
-	}
-</style>
+<div id="editor">
+    @Model.content
+</div>
 
-<div id="editor">@Model.content</div>
+@using (Html.BeginForm("SaveCode", "Project", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.content, new { @id = "hidden_editor" })
+    @Html.HiddenFor(m => m.fileID, new { @id = "hidden_editor" })
+    @Html.HiddenFor(m => m.fileName, new { @id = "hidden_editor" })
+    @Html.HiddenFor(m => m.projectID, new { @id = "hidden_editor" })
+    <input type="submit" value="Save code" />
 
-<script src="../../src/ace.js" type="text/javascript" charset="utf-8"></script>
-<script>
-	window.onload = function() {
-		var editor = ace.edit("editor");
-	};
-</script>
+}
+
+
+
+@section scripts
+{
+    <script src="~/3rdparty/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("editor");
+        $("form").submit(function () {
+            $("#hidden_editor").val(editor.getSession().getValue());
+        });
+    </script>
+}

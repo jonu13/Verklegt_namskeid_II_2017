@@ -36,7 +36,9 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
-            List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
+            //List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
+            var currentUser = User.Identity.Name;
+            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
             List<Project> userProjects = _service.getProjectsFromIdList(projectIdList);
             foreach(var project in userProjects)
             {
@@ -49,6 +51,13 @@ namespace WebEditor.Controllers
         public ActionResult EditFile(int id) {
             File fileToEdit = _service.getFileById(id);
             return View(fileToEdit);
+        }
+
+        [HttpPost]
+        public ActionResult SaveCode(File model)
+        {
+            _service.updateFile(model);
+            return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
         }
     }
 }
