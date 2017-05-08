@@ -10,6 +10,7 @@ namespace WebEditor.Models.Entities
         public int fileID { get; set; }
         public string fileName { get; set; }
         public string content { get; set; }
+        public string fileType { get; set; }
         public int projectID { get; set; }
     }
 }
