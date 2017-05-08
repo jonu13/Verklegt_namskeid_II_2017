@@ -15,6 +15,7 @@ namespace WebEditor.Models.Entities
 		[Display(Name = "Name of new project:")]
 		//[Required(ErrorMessage ="The project must have a name!")]
         public string name { get; set; }
+        public string projectFileType { get; set; }
         public List<File> files { get; set; }
     }
 }
