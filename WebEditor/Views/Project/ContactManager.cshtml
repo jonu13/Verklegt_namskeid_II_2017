@@ -5,12 +5,12 @@
 
 <h2>Contact Manager</h2>
 
-<div class="container"><h2>Example 3 </h2></div>
+<div class="container"><h2>My Contacts</h2></div>
 <div id="exTab3" class="container">
     <ul class="nav nav-pills">
         @foreach(var project in Model.projects)
         {
-            if (project.projectID == 1)
+            if (project.projectID == Model.projects.First().projectID)
             {
                 <li class="active"><a href="#@project.name" data-toggle= "tab">@project.name</a></li>
             }
@@ -25,7 +25,7 @@
         @foreach(var project in Model.projects)
         {
 
-            if (project.projectID == 1)
+            if (project.projectID == Model.projects.First().projectID)
             {
                 <div class="tab-pane active" id=@project.name>
                     <table class="table">
@@ -49,7 +49,8 @@
                                     @connector.userName
                                 </td>
                                 <td>
-                                    this will be a button
+                                    
+                                    <input type="submit" value="Drop" class="btn btn-default" , new { connector.projectId, connector.userName } />
                                 </td>
                             </tr>
                         }

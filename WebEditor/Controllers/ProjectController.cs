@@ -62,7 +62,8 @@ namespace WebEditor.Controllers
             _service.updateFile(model);
             return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
         }
-
+        
+        [HttpGet]
         public ActionResult ContactManager()
         {
             var currentUser = User.Identity.Name;
@@ -71,6 +72,13 @@ namespace WebEditor.Controllers
             ModelState.Clear();
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult ContactManager(int projId, string userName)
+        {
+            _service.removeUserConnection(projId, userName);
+            return RedirectToAction("ContactManager");
         }
     }
 }

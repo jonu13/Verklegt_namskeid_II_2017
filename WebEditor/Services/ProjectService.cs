@@ -130,5 +130,16 @@ namespace WebEditor.Services
                 _db.SaveChanges();
             }
         }
+        /// <summary>
+        /// Fallið er notað í Drop takka í ContactManager
+        /// tek inn bæði username og projectid finn færsluna í ProjectUserConnector og eyði færslunni
+        /// </summary>
+        /// <param name="projId"></param>
+        /// <param name="userName"></param>
+        public void removeUserConnection(int projId, string userName)
+        {       
+            var removeUserConnection = _db.projectUserConnectors.First(c => (c.projectId == projId && c.userName == userName));
+            _db.projectUserConnectors.Remove(removeUserConnection);
+        }
 	}
 }
