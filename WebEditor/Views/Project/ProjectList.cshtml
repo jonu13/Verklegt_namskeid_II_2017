@@ -32,6 +32,7 @@
                     {
                         <li>@Html.ActionLink(Model.projects[i].files[j].fileName, "EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)</li>
                     }
+                    <li>@Html.ActionLink("Create a new file", "CreateNewFile", new { projectID = Model.projects[i].projectID }, new { @class = "btn btn-primary btn-xs" })</li>
                 </ul>
             </li>
         }
