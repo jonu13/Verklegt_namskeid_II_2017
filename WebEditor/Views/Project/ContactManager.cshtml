@@ -1,0 +1,93 @@
+﻿@model WebEditor.Models.ViewModels.ContactViewModel
+@{
+    ViewBag.Title = "ContactManager";
+}
+
+<h2>Contact Manager</h2>
+
+<div class="container"><h2>Example 3 </h2></div>
+<div id="exTab3" class="container">
+    <ul class="nav nav-pills">
+        @foreach(var project in Model.projects)
+        {
+            if (project.projectID == 1)
+            {
+                <li class="active"><a href="#@project.name" data-toggle= "tab">@project.name</a></li>
+            }
+            else
+            {
+                <li><a href="#@project.name" data-toggle="tab">@project.name</a></li>
+            }
+        }
+        </ul> 
+
+    <div class="tab-content clearfix">
+        @foreach(var project in Model.projects)
+        {
+
+            if (project.projectID == 1)
+            {
+                <div class="tab-pane active" id=@project.name>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                User email
+                            </th>
+                            <th>
+                                Drop user from project
+                            </th>
+                        </tr>
+                        @foreach(var connector in Model.contacts)
+                        {
+                            if(connector.projectId == project.projectID){ }
+                            else
+                            {
+                                continue;
+                            }
+                            <tr>
+                                <td>                                        
+                                    @connector.userName
+                                </td>
+                                <td>
+                                    this will be a button
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
+            else
+            {
+            <div class="tab-pane" id=@project.name>
+                <table class="table">
+                    <tr>
+                        <th>
+                            User email
+                        </th>
+                        <th>
+                            Drop user from project
+                        </th>
+                    </tr>
+                @foreach (var connector in Model.contacts)
+                {
+                                if (connector.projectId == project.projectID) { }
+                                else
+                                {
+                                    continue;
+                                }
+                                <tr>
+                                    <td>
+                                        @connector.userName
+                                    </td>
+                                    <td>
+                                        this will be a button
+                                    </td>
+                                </tr>
+                }
+                </table>
+            </div>
+            }
+        }
+    </div>
+</div>
+       

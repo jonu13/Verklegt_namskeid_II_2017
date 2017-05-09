@@ -19,6 +19,14 @@ namespace WebEditor.Controllers
             new File { fileID=2, fileName="File2", content="asefga asef ase fase fase f" },
             new File { fileID=3, fileName="File3", content="oesiaf joiase jfoioia sjefoiase f" }
         };
+
+        List<Project> projectList1 = new List<Project>
+        {
+            new Project { projectID=1, name="project1"},
+            new Project { projectID=2, name="project2"}
+        };
+
+        
         // GET: Project
         public ActionResult Index(int? pageIndex, string sortBy) {
             if(!pageIndex.HasValue)
@@ -36,16 +44,11 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
-            //List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
             var currentUser = User.Identity.Name;
             List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
-            List<Project> userProjects = _service.getProjectsFromIdList(projectIdList);
-            foreach(var project in userProjects)
-            {
-                project.files = _service.getFilesByProjectId(project.projectID);
-            }
-            
-            return View(userProjects);
+            var viewModel = _service.getProjectsFromIdList(projectIdList);
+
+            return View(viewModel);
         }
 
         public ActionResult EditFile(int id) {
@@ -58,6 +61,16 @@ namespace WebEditor.Controllers
         {
             _service.updateFile(model);
             return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
+        }
+
+        public ActionResult ContactManager()
+        {
+            var currentUser = User.Identity.Name;
+            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
+            var viewModel = _service.getProjectsFromIdList2(projectIdList, currentUser);
+            ModelState.Clear();
+
+            return View(viewModel);
         }
     }
 }
