@@ -107,7 +107,7 @@ namespace WebEditor.Services
 
 		public bool projectIsEmpty(int projectID)
 		{   
-			File tmpFile = _db.files.SingleOrDefault(x => x.projectID == projectID);
+			File tmpFile = _db.files.FirstOrDefault(x => x.projectID == projectID);
 			if(tmpFile == null)
 			{
 				return true;

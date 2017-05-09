@@ -117,6 +117,7 @@ namespace WebEditor.Controllers
 		public ActionResult CreateNewFile(File model)
 		{
 			model.content = ""; // Because "" doesnt survive the view class.
+			model.fileName = model.fileName + "." + model.fileType;
 			_service.WriteNewFileToDataBase(model);
 			return RedirectToAction("ProjectList");
 		}
