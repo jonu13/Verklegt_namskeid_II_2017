@@ -292,6 +292,7 @@
     <Content Include="Views\Project\ProjectList.cshtml" />
     <Content Include="Views\Project\EditFile.cshtml" />
     <Content Include="Views\Project\CreateNewProject.cshtml" />
+    <Content Include="Views\Project\CreateNewFile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="3rdparty\ace\" />

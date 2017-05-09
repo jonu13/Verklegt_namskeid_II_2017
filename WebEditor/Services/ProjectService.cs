@@ -96,26 +96,29 @@ namespace WebEditor.Services
 			{
 				_db.projects.Add(newProject);
 				_db.SaveChanges();
-				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName);
+				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
 			}
 		}
 
-		public void WriteNewFileToDataBase(string fileName, int projectID)
+		public void WriteNewFileToDataBase(File newFile)
 		{
-			File newFile = new File();
-			newFile.fileName = fileName;
-			newFile.projectID = projectID;
-			newFile.content = "";
 			_db.files.Add(newFile);
 			_db.SaveChanges();
 		}
 
-		public void addUserToProject(int projectID, string userName)
+		public void addUserToProject(int projectID, string userName, bool owner)
 		{
 			ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
 			newUserProjectConnection.projectId = projectID;
 			newUserProjectConnection.userName = userName;
-			newUserProjectConnection.role = "";
+			if(owner == true)
+			{
+				newUserProjectConnection.role = "Owner";
+			}
+			else
+			{
+				newUserProjectConnection.role = "";
+			}
 			newUserProjectConnection.userId = null;
 			
 			_db.projectUserConnectors.Add(newUserProjectConnection);
@@ -132,6 +135,16 @@ namespace WebEditor.Services
                 _db.SaveChanges();
             }
         }
+
+		public bool projectIsEmpty(int projectID)
+		{   
+			File tmpFile = _db.files.FirstOrDefault(x => x.projectID == projectID);
+			if(tmpFile == null)
+			{
+				return true;
+			}
+			return false;
+		}
 		/*
         public ProjectViewModel getProjectById(int projectId) {
             var project = _db.projects.SingleOrDefault(x => x.id == projectId);
