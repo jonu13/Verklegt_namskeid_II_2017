@@ -21,21 +21,46 @@
 	</div>
 </div>
 
-<h2>My Projects</h2>
-<ul>
-        @for(int i = 0; i < Model.projects.Count; i++)
-        {
-            <li>
-                @Model.projects[i].name - (@Model.roles[i])
-                <ul>
-                    @for(int j = 0; j < Model.projects[i].files.Count; j++)
-                    {
-                        <li>@Html.ActionLink(Model.projects[i].files[j].fileName, "EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)</li>
-                    }
-                    <li>@Html.ActionLink("Create a new file", "CreateNewFile", new { projectID = Model.projects[i].projectID }, new { @class = "btn btn-primary btn-xs" })</li>
-                </ul>
-            </li>
-        }
-</ul>
-
+<h2>All Projects</h2>
+@if (Model.projects.Count <= 0)
+{
+    <h3>You have no projects yet...</h3>
+} else { 
+    <ul class="list-group">
+        <h3>My Projects</h3>
+            @for (int i = 0; i < Model.projects.Count; i++)
+            {
+                if(Model.roles[i] == "owner" || Model.roles[i] == "Owner")
+                {
+                    <li class="list-group-item">
+                        @Model.projects[i].name
+                        <ul>
+                            @for(int j = 0; j < Model.projects[i].files.Count; j++)
+                            {
+                                <li class="list-group-item">@Html.ActionLink(Model.projects[i].files[j].fileName, "EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)</li>
+                            }
+                            <li class="list-group-item">@Html.ActionLink("Create a new file", "CreateNewFile", new { projectID = Model.projects[i].projectID }, new { @class = "btn btn-primary btn-xs" })</li>
+                        </ul>
+                    </li>
+                }
+            }
+            <h3>Collaborator</h3>
+            @for (int i = 0; i < Model.projects.Count; i++)
+            {
+                if (Model.roles[i] == "guest" || Model.roles[i] == "Guest")
+                {
+                    <li>
+                        @Model.projects[i].name
+                        <ul>
+                            @for (int j = 0; j < Model.projects[i].files.Count; j++)
+                            {
+                                <li>@Html.ActionLink(Model.projects[i].files[j].fileName, "EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)</li>
+                            }
+                            <li>@Html.ActionLink("Create a new file", "CreateNewFile", new { projectID = Model.projects[i].projectID })</li>
+                        </ul>
+                    </li>
+                }
+            }
+    </ul>
+}
 @Html.ActionLink("Create new project", "CreateNewProject", null, new { @class = "btn btn-primary btn-sm"})

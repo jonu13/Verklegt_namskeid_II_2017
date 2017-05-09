@@ -113,11 +113,11 @@ namespace WebEditor.Services
 			newUserProjectConnection.userName = userName;
 			if(owner == true)
 			{
-				newUserProjectConnection.role = "Owner";
+				newUserProjectConnection.role = "owner";
 			}
 			else
 			{
-				newUserProjectConnection.role = "";
+				newUserProjectConnection.role = "guest";
 			}
 			newUserProjectConnection.userId = null;
 			

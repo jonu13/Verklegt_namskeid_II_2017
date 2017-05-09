@@ -36,6 +36,8 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
+            if(!checkAuthentication())
+                return RedirectToAction("Login", "Account");
             //List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
             var currentUser = User.Identity.Name;
             List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
@@ -46,6 +48,11 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult EditFile(int id) {
+            if (!checkAuthentication())
+            { 
+                return RedirectToAction("Login", "Account");
+            }
+
             File fileToEdit = _service.getFileById(id);
             return View(fileToEdit);
         }
@@ -60,7 +67,11 @@ namespace WebEditor.Controllers
 		[HttpGet]
 		public ActionResult CreateNewProject()
 		{
-			Project model = new Project();
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            Project model = new Project();
 			model.projectFileType = "cpp";
 			return View(model);
 		}
@@ -86,7 +97,12 @@ namespace WebEditor.Controllers
 		[HttpGet]
 		public ActionResult CreateNewFile(int projectID)
 		{
-			File model = new File();
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            File model = new File();
             var userName = User.Identity.Name;
 
 			List<int> listOfOneProject = new List<int>(1);
@@ -119,6 +135,13 @@ namespace WebEditor.Controllers
 			_service.WriteNewFileToDataBase(model);
 			return RedirectToAction("ProjectList");
 		}
+
+        private bool checkAuthentication()
+        {
+            if (User.Identity.IsAuthenticated) 
+                return true;
+            return false;
+        }
 	}
 
 }
