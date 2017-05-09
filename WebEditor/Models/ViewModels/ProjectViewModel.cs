@@ -9,5 +9,6 @@ namespace WebEditor.Models.ViewModels
     public class ProjectViewModel
     {
         public List<Project> projects { get; set; }
+        public List<string> roles { get; set; }
     }
 }

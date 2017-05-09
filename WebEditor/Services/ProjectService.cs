@@ -36,11 +36,32 @@ namespace WebEditor.Services
             return projectsIds.ToList();
         }
 
-        public List<Project> getProjectsFromIdList(List<int> projIds)
+        public ProjectViewModel getProjectsFromIdList(List<int> projIds)
         {
             var projects = _db.projects.Where(p => projIds.Contains(p.projectID));
-            
-            return projects.ToList();
+
+            ProjectViewModel viewModel = new ProjectViewModel
+            {
+                projects = projects.ToList()
+            };
+
+            foreach (var project in viewModel.projects)
+            {
+                project.files = getFilesByProjectId(project.projectID);
+            }
+
+            return viewModel;
+        }
+
+        public List<string> getRolesWithProjecList(string userName, List<Project> projects)
+        {
+            var roleList = new List<string>();
+            foreach (var pro in projects)
+            {
+                var curRole = _db.projectUserConnectors.First(r => r.userName == userName && r.projectId == pro.projectID);
+                roleList.Add(curRole.role);
+            }
+            return roleList;
         }
 
         public List<File> getFilesByProjectId(int id)
@@ -56,6 +77,14 @@ namespace WebEditor.Services
             var file = _db.files.First(f => f.fileID == id);
 
             return file;
+        }
+
+        public List<string> getProjectConnections(string userName, List<int> projectIds)
+        {
+            var connections = from c in _db.projectUserConnectors
+                              where c.userName == userName && projectIds.Contains(c.projectId)
+                              select c.role;
+            return connections.ToList();
         }
 
 		public void writeNewProjectToDataBase(Project newProject, string userName)

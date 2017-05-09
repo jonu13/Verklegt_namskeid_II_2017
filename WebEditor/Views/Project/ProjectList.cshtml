@@ -1,4 +1,4 @@
-﻿@model List<WebEditor.Models.Entities.Project>
+﻿@model WebEditor.Models.ViewModels.ProjectViewModel
 @{
     ViewBag.Title = "ProjectList";
 }
@@ -21,16 +21,16 @@
 	</div>
 </div>
 
-<h2>Your Projects</h2>
+<h2>My Projects</h2>
 <ul>
-        @foreach (var project in Model)
+        @for (int i = 0; i < Model.projects.Count; i++)
         {
             <li>
-                @project.name
+                @Model.projects[i].name - (@Model.roles[i])
                 <ul>
-                    @foreach (var file in project.files)
+                    @for(int j = 0; j < Model.projects[i].files.Count; j++)
                     {
-                        <li>@Html.ActionLink(@file.fileName, "EditFile", "Project", new { id = file.fileID }, null)</li>
+                        <li>@Html.ActionLink(Model.projects[i].files[j].fileName, "EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)</li>
                     }
                 </ul>
             </li>
