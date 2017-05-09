@@ -87,10 +87,11 @@ namespace WebEditor.Controllers
 		public ActionResult CreateNewFile(int projectID)
 		{
 			File model = new File();
+            var userName = User.Identity.Name;
 
 			List<int> listOfOneProject = new List<int>(1);
 			listOfOneProject.Add(projectID);
-			string projectFileType = _service.getProjectsFromIdList(listOfOneProject).projects.First().projectFileType;
+			string projectFileType = _service.getProjectsFromIdList(listOfOneProject, userName).projects.First().projectFileType;
 
 			model.content = "";
 			model.projectID = projectID;
