@@ -36,7 +36,7 @@ namespace WebEditor.Services
             return projectsIds.ToList();
         }
 
-        public ProjectViewModel getProjectsFromIdList(List<int> projIds)
+        public ProjectViewModel getProjectsFromIdList(List<int> projIds, string userName)
         {
             var projects = _db.projects.Where(p => projIds.Contains(p.projectID));
 
@@ -49,6 +49,8 @@ namespace WebEditor.Services
             {
                 project.files = getFilesByProjectId(project.projectID);
             }
+
+            viewModel.roles = getRolesWithProjecList(userName, viewModel.projects);
 
             return viewModel;
         }

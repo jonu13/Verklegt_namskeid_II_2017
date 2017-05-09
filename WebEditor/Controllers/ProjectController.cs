@@ -39,8 +39,8 @@ namespace WebEditor.Controllers
             //List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
             var currentUser = User.Identity.Name;
             List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
-            var viewModel = _service.getProjectsFromIdList(projectIdList);
-            viewModel.roles = _service.getRolesWithProjecList(currentUser, viewModel.projects);
+            var viewModel = _service.getProjectsFromIdList(projectIdList, currentUser);
+            //viewModel.roles = _service.getRolesWithProjecList(currentUser, viewModel.projects);
 
             return View(viewModel);
         }
