@@ -19,6 +19,14 @@ namespace WebEditor.Controllers
             new File { fileID=2, fileName="File2", content="asefga asef ase fase fase f" },
             new File { fileID=3, fileName="File3", content="oesiaf joiase jfoioia sjefoiase f" }
         };
+
+        List<Project> projectList1 = new List<Project>
+        {
+            new Project { projectID=1, name="project1"},
+            new Project { projectID=2, name="project2"}
+        };
+
+
         // GET: Project
         public ActionResult Index(int? pageIndex, string sortBy) {
             if(!pageIndex.HasValue)
@@ -49,7 +57,7 @@ namespace WebEditor.Controllers
 
         public ActionResult EditFile(int id) {
             if (!checkAuthentication())
-            { 
+            {
                 return RedirectToAction("Login", "Account");
             }
 
@@ -90,7 +98,7 @@ namespace WebEditor.Controllers
 		}
 
 		public bool projectIsEmpty(int projectID)
-		{ 
+		{
 			return _service.projectIsEmpty(projectID);
 		}
 
@@ -112,7 +120,7 @@ namespace WebEditor.Controllers
 			model.content = "";
 			model.projectID = projectID;
 			model.fileType = projectFileType;
-			
+
 			if (projectIsEmpty(projectID))
 			{   // First file in project shall be index.someFileType
 
@@ -141,12 +149,29 @@ namespace WebEditor.Controllers
 
         private bool checkAuthentication()
         {
-            if (User.Identity.IsAuthenticated) 
+            if (User.Identity.IsAuthenticated)
                 return true;
             return false;
         }
 
-		
-	}
+        [HttpGet]
+        public ActionResult ContactManager()
+        {
+            var currentUser = User.Identity.Name;
+            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
+            var viewModel = _service.getProjectsFromIdList2(projectIdList, currentUser);
+            ModelState.Clear();
 
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult ContactManager(int projId, string userName)
+        {
+            _service.removeUserConnection(projId, userName);
+            return RedirectToAction("ContactManager");
+        }
+
+
+    }
 }
