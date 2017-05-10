@@ -93,11 +93,25 @@ namespace WebEditor.Services
 		public void writeNewProjectToDataBase(Project newProject, string userName)
 		{	// Adds newProject into table and also adds current user to that project.
 
-			if(newProject.name != null)
+			if(newProject.name != null && isAvailableProjectName(newProject.name))
 			{
 				_db.projects.Add(newProject);
 				_db.SaveChanges();
 				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
+			}
+		}
+
+		public bool isAvailableProjectName(string projectName)
+		{	// Checks if project name is already in the database. 
+
+			Project projectInDB = _db.projects.FirstOrDefault(x => x.name == projectName);
+			if(projectInDB == null)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
 			}
 		}
 

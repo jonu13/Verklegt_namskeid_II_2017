@@ -13,7 +13,7 @@ namespace WebEditor.Models.Entities
     {
         public int projectID { get; set; }
 		[Display(Name = "Name of new project:")]
-		//[Required(ErrorMessage ="The project must have a name!")]
+		[Required(ErrorMessage ="The project must have a name!")]
         public string name { get; set; }
 		[Display(Name = "Write the file endings:")]
 		public string projectFileType { get; set; }

@@ -37,3 +37,13 @@ textarea {
     background-image: url(images/file.png);
     height: 200px;
 }
+
+#right-column {
+    float: right;
+    width: 49%;
+}
+
+#left-column {
+    float: left;
+    width: 49%;
+}
