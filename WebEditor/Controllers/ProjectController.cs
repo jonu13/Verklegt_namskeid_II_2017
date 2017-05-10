@@ -80,5 +80,7 @@ namespace WebEditor.Controllers
             _service.removeUserConnection(projId, userName);
             return RedirectToAction("ContactManager");
         }
+
+
     }
 }

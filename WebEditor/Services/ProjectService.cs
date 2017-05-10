@@ -140,6 +140,9 @@ namespace WebEditor.Services
         {       
             var removeUserConnection = _db.projectUserConnectors.First(c => (c.projectId == projId && c.userName == userName));
             _db.projectUserConnectors.Remove(removeUserConnection);
+            _db.SaveChanges();
         }
+
+
 	}
 }

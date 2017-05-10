@@ -39,20 +39,30 @@
                         </tr>
                         @foreach(var connector in Model.contacts)
                         {
+                            int count = 1;
                             if(connector.projectId == project.projectID){ }
                             else
                             {
                                 continue;
                             }
                             <tr>
-                                <td>                                        
+                                <td id="@connector.userName">                                        
                                     @connector.userName
                                 </td>
-                                <td>
+                                <td id="count">
+                                    @using (Html.BeginForm("ContactManager", "Project", FormMethod.Post/*new {  = project.projectID, connector.userName }*/)) {
+                                        <input type="hidden" name="projId" value="@project.projectID"/>
+                                        <input type="hidden" name="userName" value="@connector.userName" />
+                                        <input type="submit" value="Drop" class="btn btn-default">
+                                    } 
+                                        <!--Html.HiddenFor(bla => bla.hiddenProjectId, new { value = project.projectID });-->
+                                        <!--Html.HiddenFor(bla => bla.hiddenName, new { value = connector.userName});-->
+                                        <!--Html.ActionLink("Drop", "ContactManager", "Project", new { connector.projectId, connector.userName }, null);-->
+                                    <!--<input type="submit" value="Drop" class="btn btn-default" onclick="location.href='Url.Action("ContactManager", "Project")'", new { connector.projectId, connector.userName/>-->
                                     
-                                    <input type="submit" value="Drop" class="btn btn-default" , new { connector.projectId, connector.userName } />
                                 </td>
                             </tr>
+                            count++;
                         }
                     </table>
                 </div>
@@ -88,6 +98,16 @@
                 </table>
             </div>
             }
+        }
+    </div>
+</div>
+
+<div class="container"><h3>Add contacts to project</h3></div>
+<div id="Search" class="container">
+    <div>
+        @using (Html.BeginForm())
+        {
+
         }
     </div>
 </div>
