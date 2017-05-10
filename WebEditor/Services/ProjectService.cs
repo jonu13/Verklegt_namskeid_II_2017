@@ -11,8 +11,9 @@ namespace WebEditor.Services
     public class ProjectService
     {
         private ApplicationDbContext _db;
+		
 
-        public ProjectService() {
+		public ProjectService() {
             _db = new ApplicationDbContext();
         }
 
@@ -108,6 +109,16 @@ namespace WebEditor.Services
 
 		public void addUserToProject(int projectID, string userName, bool owner)
 		{
+			// Todo! check if username or projectID exists
+			//_db.
+			if(!isRegisteredUser(userName))
+			{
+				return;
+			}
+			if(isAlreadyConnectedToProject(projectID, userName))
+			{
+				return;
+			}
 			ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
 			newUserProjectConnection.projectId = projectID;
 			newUserProjectConnection.userName = userName;
@@ -124,6 +135,33 @@ namespace WebEditor.Services
 			_db.projectUserConnectors.Add(newUserProjectConnection);
 			_db.SaveChanges();
 		}
+
+		public bool isRegisteredUser(string userName)
+		{
+			var userEntry = _db.Users.FirstOrDefault(f => f.UserName == userName);
+			if(userEntry == null)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		public bool isAlreadyConnectedToProject(int projectID, string userName)
+		{
+			ProjectUserConnectors connection = _db.projectUserConnectors.FirstOrDefault(x => (x.projectId == projectID && x.userName == userName));
+			if(connection == null)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+			
+			
 
         public void updateFile(File updateFile)
         {
@@ -157,6 +195,11 @@ namespace WebEditor.Services
 			{
 				return true;
 			}
+		}
+
+		public List<ProjectUserConnectors> getAllConnections()
+		{
+			return _db.projectUserConnectors.ToList();
 		}
 		/*
         public ProjectViewModel getProjectById(int projectId) {

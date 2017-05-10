@@ -145,8 +145,23 @@ namespace WebEditor.Controllers
                 return true;
             return false;
         }
-
 		
+		[HttpGet]
+		public ActionResult contactManager(int projectID)
+		{
+			contactManagerViewModel model = new contactManagerViewModel();
+			model.connectors = _service.getAllConnections();
+			model.projectID = projectID;
+			model.userName = "";
+			return View(model);
+		}
+
+		[HttpPost]
+		public ActionResult contactManager(int projectID, string userName)
+		{
+			_service.addUserToProject(projectID, userName, false);
+			return contactManager(projectID);
+		}
 	}
 
 }

@@ -35,6 +35,8 @@ else
             {
                 if (Model.roles[i] == "owner" || Model.roles[i] == "Owner")
                 {
+                    
+                    <a href="@Url.Action("contactManager", "Project", new { projectID = Model.projects[i].projectID }, null)"/>
                     <h4>@Model.projects[i].name</h4>
                     <div class="row">
                         @if(Model.projects[i].files.Count <= 0)
