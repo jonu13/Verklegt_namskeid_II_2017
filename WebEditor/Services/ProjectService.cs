@@ -145,6 +145,19 @@ namespace WebEditor.Services
 			}
 			return false;
 		}
+
+		public bool projectAlreadyHasFileName(string fileName, int projectID)
+		{   // TODO! implement!
+			File fileInDB = _db.files.FirstOrDefault(x => (x.fileName == fileName && x.projectID == projectID));
+			if(fileInDB == null)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
 		/*
         public ProjectViewModel getProjectById(int projectId) {
             var project = _db.projects.SingleOrDefault(x => x.id == projectId);

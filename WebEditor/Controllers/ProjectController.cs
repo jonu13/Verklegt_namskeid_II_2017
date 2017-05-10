@@ -132,7 +132,10 @@ namespace WebEditor.Controllers
 		{
 			model.content = ""; // Because "" doesnt survive the view class.
 			model.fileName = model.fileName + "." + model.fileType;
-			_service.WriteNewFileToDataBase(model);
+			if(!_service.projectAlreadyHasFileName(model.fileName, model.projectID))
+			{
+				_service.WriteNewFileToDataBase(model);
+			}
 			return RedirectToAction("ProjectList");
 		}
 
@@ -142,6 +145,8 @@ namespace WebEditor.Controllers
                 return true;
             return false;
         }
+
+		
 	}
 
 }
