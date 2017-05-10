@@ -297,6 +297,7 @@
   <ItemGroup>
     <Folder Include="3rdparty\ace\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Content\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
