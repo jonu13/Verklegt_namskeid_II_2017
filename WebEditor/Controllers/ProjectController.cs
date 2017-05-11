@@ -13,20 +13,6 @@ namespace WebEditor.Controllers
     public class ProjectController : Controller
     {
         private ProjectService _service = new ProjectService();
-        List<File> fileList1 = new List<File>
-        {
-            new File { fileID=1, fileName="File1", content="ablabsleicanseilbf" },
-            new File { fileID=2, fileName="File2", content="asefga asef ase fase fase f" },
-            new File { fileID=3, fileName="File3", content="oesiaf joiase jfoioia sjefoiase f" }
-        };
-
-        List<Project> projectList1 = new List<Project>
-        {
-            new Project { projectID=1, name="project1"},
-            new Project { projectID=2, name="project2"}
-        };
-
-
         // GET: Project
         public ActionResult Index(int? pageIndex, string sortBy) {
             if(!pageIndex.HasValue)
@@ -42,7 +28,28 @@ namespace WebEditor.Controllers
 
             return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
         }
+        /// <summary>
+        /// nær í öll project sem current user á og 
+        /// nær í alla contacta sem að eru í þeim projectum og sendir það inn í viewið
+        /// JDP
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ContactManager()
+        {
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var currentUser = User.Identity.Name;
+            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
+            var viewModel = _service.getProjectsFromIdListByUserName(projectIdList, currentUser);
+            ModelState.Clear();
 
+            return View(viewModel);
+        }
+
+        [HttpGet]
         public ActionResult ProjectList() {
             if(!checkAuthentication())
                 return RedirectToAction("Login", "Account");
@@ -55,6 +62,7 @@ namespace WebEditor.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
         public ActionResult EditFile(int id) {
             if (!checkAuthentication())
             {
@@ -64,43 +72,6 @@ namespace WebEditor.Controllers
             File fileToEdit = _service.getFileById(id);
             return View(fileToEdit);
         }
-
-        [HttpPost]
-        public ActionResult SaveCode(File model)
-        {
-            _service.updateFile(model);
-            return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
-        }
-
-		[HttpGet]
-		public ActionResult CreateNewProject()
-		{
-            if (!checkAuthentication())
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            Project model = new Project();
-			model.projectFileType = "cpp";
-			return View(model);
-		}
-
-		[HttpPost]
-		public ActionResult CreateNewProject(Project model)
-		{
-			/*if(ModelState.IsValid)
-			{
-				_service.writeNewProjectToDataBase(model);
-				return RedirectToAction("ProjectList");
-			}*/
-			_service.writeNewProjectToDataBase(model, User.Identity.Name);
-			return RedirectToAction("ProjectList");
-			//return View(model);
-		}
-
-		public bool projectIsEmpty(int projectID)
-		{
-			return _service.projectIsEmpty(projectID);
-		}
 
 		[HttpGet]
 		public ActionResult CreateNewFile(int projectID)
@@ -135,6 +106,38 @@ namespace WebEditor.Controllers
 			}
 		}
 
+		[HttpGet]
+		public ActionResult CreateNewProject()
+		{
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            Project model = new Project();
+			model.projectFileType = "cpp";
+			return View(model);
+		}
+
+        [HttpPost]
+        public ActionResult SaveCode(File model)
+        {
+            _service.updateFile(model);
+            return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
+        }
+
+		[HttpPost]
+		public ActionResult CreateNewProject(Project model)
+		{
+			/*if(ModelState.IsValid)
+			{
+				_service.writeNewProjectToDataBase(model);
+				return RedirectToAction("ProjectList");
+			}*/
+			_service.writeNewProjectToDataBase(model, User.Identity.Name);
+			return RedirectToAction("ProjectList");
+			//return View(model);
+		}
+
 		[HttpPost]
 		public ActionResult CreateNewFile(File model)
 		{
@@ -146,34 +149,6 @@ namespace WebEditor.Controllers
 			}
 			return RedirectToAction("ProjectList");
 		}
-
-        private bool checkAuthentication()
-        {
-            if (User.Identity.IsAuthenticated)
-                return true;
-            return false;
-        }
-
-        /// <summary>
-        /// nær í öll project sem current user á og 
-        /// nær í alla contacta sem að eru í þeim projectum og sendir það inn í viewið
-        /// JDP
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public ActionResult ContactManager()
-        {
-            if (!checkAuthentication())
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            var currentUser = User.Identity.Name;
-            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
-            var viewModel = _service.getProjectsFromIdListByUserName(projectIdList, currentUser);
-            ModelState.Clear();
-
-            return View(viewModel);
-        }
 
         /// <summary>
         /// eyðum contact úr projecti með því að ýta á drop takka inn í contact manager
@@ -204,5 +179,16 @@ namespace WebEditor.Controllers
             return RedirectToAction("ContactManager");
         }
 
+		public bool projectIsEmpty(int projectID)
+		{
+			return _service.projectIsEmpty(projectID);
+		}
+
+        private bool checkAuthentication()
+        {
+            if (User.Identity.IsAuthenticated)
+                return true;
+            return false;
+        }
     }
 }
