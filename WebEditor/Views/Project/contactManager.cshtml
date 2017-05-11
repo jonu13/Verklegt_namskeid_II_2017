@@ -1,11 +1,13 @@
 ﻿@model WebEditor.Models.ViewModels.contactManagerViewModel
 
+<h1>@Model.project.name</h1>
+
 <h4>These users have access to this project</h4>
 
 <ul class="list-group">
     @foreach (var connector in Model.connectors)
     {
-        if(connector.projectId == Model.projectID)
+        if(connector.projectId == Model.project.projectID)
         {
             <li class="list-group-item">@connector.userName</li>
         }
@@ -29,7 +31,7 @@
 
         <div class="form-group">
             <div class="col-md-10">
-                @Html.HiddenFor(model => model.projectID, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.HiddenFor(model => model.project.projectID, new { htmlAttributes = new { @class = "form-control" } })
             </div>
         </div>
 

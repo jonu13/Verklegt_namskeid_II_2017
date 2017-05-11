@@ -82,6 +82,20 @@ namespace WebEditor.Services
             return file;
         }
 
+        public Project getProjectById(int projectID)
+        {
+            var project = _db.projects.First(p => p.projectID == projectID);
+
+            return project;
+        }
+
+        public Project searchProjectByName(string projectName)
+        {
+            var project = _db.projects.First(p => p.name == projectName);
+
+            return project;
+        }
+
         public List<string> getProjectConnections(string userName, List<int> projectIds)
         {
             var connections = from c in _db.projectUserConnectors
@@ -97,9 +111,24 @@ namespace WebEditor.Services
 			{
 				_db.projects.Add(newProject);
 				_db.SaveChanges();
-				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
+
+                createFirstFile(newProject);
+                addUserToProject((_db.projects.FirstOrDefault(x => x.name == newProject.name)).projectID, userName, true);
 			}
 		}
+
+        public void createFirstFile(Project newProject)
+        {
+            Project currProject = searchProjectByName(newProject.name);
+            File indexFile = new File();
+
+            indexFile.fileName = "index." + currProject.projectFileType;
+            indexFile.fileType = newProject.projectFileType;
+            indexFile.content = "";
+            indexFile.projectID = currProject.projectID;
+
+            WriteNewFileToDataBase(indexFile);
+        }
 
 		public bool isAvailableProjectName(string projectName)
 		{	// Checks if project name is already in the database. 
@@ -162,6 +191,7 @@ namespace WebEditor.Services
 				return true;
 			}
 		}
+
 		public bool isAlreadyConnectedToProject(int projectID, string userName)
 		{
 			ProjectUserConnectors connection = _db.projectUserConnectors.FirstOrDefault(x => (x.projectId == projectID && x.userName == userName));
@@ -173,9 +203,7 @@ namespace WebEditor.Services
 			{
 				return true;
 			}
-		}
-			
-			
+		}			
 
         public void updateFile(File updateFile)
         {

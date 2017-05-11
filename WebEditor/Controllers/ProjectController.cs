@@ -13,12 +13,7 @@ namespace WebEditor.Controllers
     public class ProjectController : Controller
     {
         private ProjectService _service = new ProjectService();
-        List<File> fileList1 = new List<File>
-        {
-            new File { fileID=1, fileName="File1", content="ablabsleicanseilbf" },
-            new File { fileID=2, fileName="File2", content="asefga asef ase fase fase f" },
-            new File { fileID=3, fileName="File3", content="oesiaf joiase jfoioia sjefoiase f" }
-        };
+
         // GET: Project
         public ActionResult Index(int? pageIndex, string sortBy) {
             if(!pageIndex.HasValue)
@@ -36,13 +31,13 @@ namespace WebEditor.Controllers
         }
 
         public ActionResult ProjectList() {
-            if(!checkAuthentication())
+            if(!checkAuthentication()) {
                 return RedirectToAction("Login", "Account");
-            //List<int> projectIdList = _service.getProjectIdsByUserId(1);    // Static parameter fyrir userId TODO: sækja úr db
+            }
+
             var currentUser = User.Identity.Name;
-            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
-            var viewModel = _service.getProjectsFromIdList(projectIdList, currentUser);
-            //viewModel.roles = _service.getRolesWithProjecList(currentUser, viewModel.projects);
+            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);    // Get the project id list from the ProjectUserConnectors table
+            var viewModel = _service.getProjectsFromIdList(projectIdList, currentUser); // Using the project id list fetch every project from Project table
 
             return View(viewModel);
         }
@@ -138,20 +133,17 @@ namespace WebEditor.Controllers
 			}
 			return RedirectToAction("ProjectList");
 		}
-
-        private bool checkAuthentication()
-        {
-            if (User.Identity.IsAuthenticated) 
-                return true;
-            return false;
-        }
 		
 		[HttpGet]
 		public ActionResult contactManager(int projectID)
 		{
-			contactManagerViewModel model = new contactManagerViewModel();
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            contactManagerViewModel model = new contactManagerViewModel();
 			model.connectors = _service.getAllConnections();
-			model.projectID = projectID;
+			model.project = _service.getProjectById(projectID);
 			model.userName = "";
 			return View(model);
 		}
@@ -161,7 +153,14 @@ namespace WebEditor.Controllers
 		{
 			_service.addUserToProject(projectID, userName, false);
 			return contactManager(projectID);
-		}
-	}
+        }
+
+        private bool checkAuthentication()
+        {
+            if (User.Identity.IsAuthenticated)
+                return true;
+            return false;
+        }
+    }
 
 }

@@ -47,3 +47,7 @@ textarea {
     float: left;
     width: 49%;
 }
+
+#file-name {
+    word-wrap: break-word;
+}

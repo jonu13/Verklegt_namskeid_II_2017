@@ -45,8 +45,8 @@ else
                         <div class="row">
                             @if(Model.projects[i].files.Count <= 0)
                             {
-                                <div class="col-xs-2">No files in project...</div>
-                                <div class="col-xs-2">
+                                <div class="col-xs-3">No files in project...</div>
+                                <div class="col-xs-3">
                                     <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
                                         <img src="~/Content/images/add.png" />
                                     </a>
@@ -56,16 +56,16 @@ else
                             {
                                 for (int j = 0; j < Model.projects[i].files.Count; j++)
                                 {
-                                    <div class="col-xs-2">
+                                    <div class="col-xs-3">
                                         <a href="@Url.Action("EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)" class="thumbnail">
-                                            <div class="caption">
-                                                <h4 class="">@Model.projects[i].files[j].fileName</h4>
+                                            <div class="caption" id="file-name">
+                                                <h5 class="">@Model.projects[i].files[j].fileName</h5>
                                             </div>
                                             <img src="~/Content/images/file.png" />    
                                         </a>
                                     </div>
                                 }
-                                <div class="col-xs-2">
+                                <div class="col-xs-3">
                                     <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
                                         <img src="~/Content/images/add.png" />
                                     </a>
@@ -87,8 +87,8 @@ else
                     <div class="row">
                         @if (Model.projects[i].files.Count <= 0)
                         {
-                            <div class="col-xs-2">No files in project...</div>
-                            <div class="col-xs-2 glyphicon-align-center">
+                            <div class="col-xs-3">No files in project...</div>
+                            <div class="col-xs-3 glyphicon-align-center">
                                 <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
                                     <img src="~/Content/images/add.png" />
                                 </a>
@@ -98,16 +98,16 @@ else
                         {
                             for (int j = 0; j < Model.projects[i].files.Count; j++)
                             {
-                                <div class="col-xs-2">
+                                <div class="col-xs-3">
                                     <a href="@Url.Action("EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)" class="thumbnail">
                                         <div class="caption">
-                                            <h4 class="">@Model.projects[i].files[j].fileName</h4>
+                                            <h5 class="">@Model.projects[i].files[j].fileName</h5>
                                         </div>
                                         <img src="~/Content/images/file.png" />
                                     </a>
                                 </div>
                             }
-                            <div class="col-xs-2">
+                            <div class="col-xs-3">
                                 <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
                                     <img src="~/Content/images/add.png" />
                                 </a>
