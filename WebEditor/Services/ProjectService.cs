@@ -80,7 +80,7 @@ namespace WebEditor.Services
         public ContactViewModel getProjectsFromIdListByUserName(List<int> projIds, string userName)
         {
             var projects = _db.projects.Where(p => projIds.Contains(p.projectID));
-            var contacts = _db.projectUserConnectors.Where(c => projIds.Contains(c.projectId) && c.userName != userName);
+            var contacts = _db.projectUserConnectors.Where(c => projIds.Contains(c.projectId) );
 
             ContactViewModel viewModel = new ContactViewModel
             {
