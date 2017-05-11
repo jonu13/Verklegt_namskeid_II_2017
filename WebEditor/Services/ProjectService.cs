@@ -131,9 +131,42 @@ namespace WebEditor.Services
 			_db.SaveChanges();
 		}
 
-		public void addUserToProject(int projectID, string userName, bool owner)
+        public bool isRegisteredUser(string userName)
+        {
+            var userEntry = _db.Users.FirstOrDefault(f => f.UserName == userName);
+            if (userEntry == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+        public bool isAlreadyConnectedToProject(int projectID, string userName)
+        {
+            ProjectUserConnectors connection = _db.projectUserConnectors.FirstOrDefault(x => (x.projectId == projectID && x.userName == userName));
+            if (connection == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public void addUserToProject(int projectID, string userName, bool owner)
 		{
-			ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
+            if (!isRegisteredUser(userName))
+            {
+                return;
+            }
+            if (isAlreadyConnectedToProject(projectID, userName))
+            {
+                return;
+            }
+            ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
 			newUserProjectConnection.projectId = projectID;
 			newUserProjectConnection.userName = userName;
 			if(owner == true)

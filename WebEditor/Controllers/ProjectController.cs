@@ -172,6 +172,12 @@ namespace WebEditor.Controllers
             return RedirectToAction("ContactManager");
         }
 
+        [HttpPost]
+        public ActionResult AddUserToProject(int projId, string userName)
+        {
+            _service.addUserToProject(projId, userName, false);
+            return RedirectToAction("ContactManager");
+        }
 
     }
 }
