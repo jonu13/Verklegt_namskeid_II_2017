@@ -28,6 +28,7 @@ namespace WebEditor.Controllers
 
             return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
         }
+#region GoToView
         /// <summary>
         /// nær í öll project sem current user á og 
         /// nær í alla contacta sem að eru í þeim projectum og sendir það inn í viewið
@@ -117,7 +118,9 @@ namespace WebEditor.Controllers
 			model.projectFileType = "cpp";
 			return View(model);
 		}
+        #endregion
 
+#region ActionCallsFromView
         [HttpPost]
         public ActionResult SaveCode(File model)
         {
@@ -178,8 +181,9 @@ namespace WebEditor.Controllers
             _service.addUserToProject(projId, userName, false);
             return RedirectToAction("ContactManager");
         }
+#endregion
 
-		public bool projectIsEmpty(int projectID)
+        public bool projectIsEmpty(int projectID)
 		{
 			return _service.projectIsEmpty(projectID);
 		}
