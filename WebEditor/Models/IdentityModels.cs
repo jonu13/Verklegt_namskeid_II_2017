@@ -20,11 +20,19 @@ namespace WebEditor.Models
         public virtual Project project { get; set; }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public interface IAppDataContext
     {
-        public DbSet<Project> projects { get; set; }
-        public DbSet<File> files { get; set; }
-        public DbSet<ProjectUserConnectors> projectUserConnectors { get; set; }
+        IDbSet<Project> projects { get; set; }
+        IDbSet<File> files { get; set; }
+        IDbSet<ProjectUserConnectors> projectUserConnectors { get; set; }
+        int SaveChanges();
+    }
+
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IAppDataContext
+    {
+        public IDbSet<Project> projects { get; set; }
+        public IDbSet<File> files { get; set; }
+        public IDbSet<ProjectUserConnectors> projectUserConnectors { get; set; }
 
 
         public ApplicationDbContext()

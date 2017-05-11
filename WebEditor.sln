@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEditor", "WebEditor\WebEditor.csproj", "{B593C06F-0DED-434A-A745-B11C7D2B467F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebEditor.Tests", "WebEditor.Tests\WebEditor.Tests.csproj", "{6A1BF36A-FFFE-48D8-8D03-DA7DAC3DE515}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{B593C06F-0DED-434A-A745-B11C7D2B467F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B593C06F-0DED-434A-A745-B11C7D2B467F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B593C06F-0DED-434A-A745-B11C7D2B467F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1BF36A-FFFE-48D8-8D03-DA7DAC3DE515}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1BF36A-FFFE-48D8-8D03-DA7DAC3DE515}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1BF36A-FFFE-48D8-8D03-DA7DAC3DE515}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1BF36A-FFFE-48D8-8D03-DA7DAC3DE515}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

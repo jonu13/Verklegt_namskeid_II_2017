@@ -33,6 +33,7 @@
     });
     var codeHub = $.connection.codeHub;
     var silent = false;
+    var code = editor.getValue();
 
     codeHub.client.onChange = function (changeData) {
         console.log(changeData);
@@ -50,7 +51,9 @@
             if(silent){
                 return;
             }
+            code = editor.getValue();
             console.log(obj);
+            codeHub.server.saveToDb(code, documentID);
             codeHub.server.onChange(obj, documentID);
         });
     });

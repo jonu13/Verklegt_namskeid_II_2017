@@ -10,8 +10,14 @@ namespace WebEditor.Services
 {
     public class ProjectService
     {
-        private ApplicationDbContext _db;
+        private readonly IAppDataContext _dbcontext;
 
+        public ProjectService(IAppDataContext context)
+        {
+            _dbcontext = context ?? new ApplicationDbContext();
+        }
+
+        private ApplicationDbContext _db;
         public ProjectService() {
             _db = new ApplicationDbContext();
         }

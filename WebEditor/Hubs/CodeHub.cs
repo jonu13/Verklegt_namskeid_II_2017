@@ -19,5 +19,11 @@ namespace WebEditor.Hubs
         {
             Clients.Group(Convert.ToString(documentID), Context.ConnectionId).OnChange(changeData);
         }
+        public void saveToDb(string code, int documentID)
+        {
+            var tempFile = _service.getFileById(documentID);
+            tempFile.content = code;
+            _service.updateFile(tempFile);
+        }
     }
 }

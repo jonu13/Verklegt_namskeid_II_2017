@@ -9,6 +9,12 @@ namespace WebEditor.Services
 {
     public class UserService
     {
+        private readonly IAppDataContext _db;
+        public UserService(IAppDataContext context)
+        {
+            _db = context ?? new ApplicationDbContext();
+        }
+
         private ApplicationDbContext _dbContext;
         public UserService()
         {
