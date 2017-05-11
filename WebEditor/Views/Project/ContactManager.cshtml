@@ -14,7 +14,7 @@
             {
                 if (project.projectID == Model.projects.First().projectID)
                 {
-                    <li class="active"><a href="#@count" data-toggle= "tab" role="tab">@project.name</a></li>
+                    <li class="active"><a href="#@count" data-toggle="tab" role="tab">@project.name</a></li>
                 }
                 else
                 {
@@ -54,7 +54,7 @@
                                         @connector.userName
                                     </td>
                                     <td>
-                                        @using (Html.BeginForm("ContactManager", "Project", FormMethod.Post))
+                                        @using (Html.BeginForm("DropUserFromProject", "Project", FormMethod.Post))
                                         {
                                             <input type="hidden" name="projId" value="@project.projectID"/>
                                             <input type="hidden" name="userName" value="@connector.userName"/>
@@ -90,7 +90,7 @@
                                     @connector.userName
                                 </td>
                                 <td>
-                                    @using (Html.BeginForm("ContactManager", "Project", FormMethod.Post))
+                                    @using (Html.BeginForm("DropUserFromProject", "Project", FormMethod.Post))
                                     {
                                         <input type="hidden" name="projId" value="@project.projectID" />
                                         <input type="hidden" name="userName" value="connector.userName"/>
@@ -109,6 +109,7 @@
 </div>
 
 <div class="container"><h3>Add contacts to project</h3></div>
+<hr>
 <div id="Search" class="container">
     <div class="form-horizontal">
         @using (Html.BeginForm("AddUserToProject", "Project", FormMethod.Post))
@@ -119,7 +120,7 @@
             </div>
             <div class="form-group">
                 <label for="Projects" class="col-md-2">Select project:</label>
-                <select class="form-control " name="projId" id="Projects">
+                <select class="form-control" name="projId" id="Projects">
                 @foreach(var project in Model.projects)
                 {
                     <option value="@project.projectID">@project.name</option>

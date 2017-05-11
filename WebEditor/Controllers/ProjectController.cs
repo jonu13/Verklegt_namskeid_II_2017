@@ -154,24 +154,49 @@ namespace WebEditor.Controllers
             return false;
         }
 
+        /// <summary>
+        /// nær í öll project sem current user á og 
+        /// nær í alla contacta sem að eru í þeim projectum og sendir það inn í viewið
+        /// JDP
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult ContactManager()
         {
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var currentUser = User.Identity.Name;
             List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
-            var viewModel = _service.getProjectsFromIdList2(projectIdList, currentUser);
+            var viewModel = _service.getProjectsFromIdListByUserName(projectIdList, currentUser);
             ModelState.Clear();
 
             return View(viewModel);
         }
 
+        /// <summary>
+        /// eyðum contact úr projecti með því að ýta á drop takka inn í contact manager
+        /// JDP
+        /// </summary>
+        /// <param name="projId"> Id af projectinum sem á að losa úr</param>
+        /// <param name="userName"> userinn sem á að losa sig við</param>
+        /// <returns></returns>
         [HttpPost]
-        public ActionResult ContactManager(int projId, string userName)
+        public ActionResult DropUserFromProject(int projId, string userName)
         {
             _service.removeUserConnection(projId, userName);
             return RedirectToAction("ContactManager");
         }
 
+        /// <summary>
+        /// bæti við user í project í contact managernum og endurhleð síðuna síðan
+        /// JDP
+        /// vantar leið til að tékka hvort userinn sem sendur inn er til yfir höfuð og senda viðeigandi error message
+        /// </summary>
+        /// <param name="projId">id af projecti sem á að bæta í</param>
+        /// <param name="userName"> userinn sem á að bæta við</param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult AddUserToProject(int projId, string userName)
         {

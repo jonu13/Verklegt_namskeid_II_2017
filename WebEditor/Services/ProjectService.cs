@@ -10,12 +10,15 @@ namespace WebEditor.Services
 {
     public class ProjectService
     {
+#region Constructor
         private ApplicationDbContext _db;
 
         public ProjectService() {
             _db = new ApplicationDbContext();
         }
+#endregion
 
+#region GetFunctions
         public List<Project> getAllProjects() {
             return _db.projects.ToList();
         }
@@ -35,7 +38,6 @@ namespace WebEditor.Services
                               select p.projectId;
             return projectsIds.ToList();
         }
-
 
         public ProjectViewModel getProjectsFromIdList(List<int> projIds, string userName)
         {
@@ -68,12 +70,11 @@ namespace WebEditor.Services
         }
 
         /// <summary>
-        /// ATH!!! var að copy fall að ofan þarf mögulega að hreinsa til eftir að virkni hefur fengist
-        /// ///breyta nafni á falli
+        /// fyllir contactviewmodel af öllum contactum sem eru tengdir projectin sem að current user á 
         /// </summary>
         /// <param name="projIds"></param>
         /// <returns></returns>
-        public ContactViewModel getProjectsFromIdList2(List<int> projIds, string userName)
+        public ContactViewModel getProjectsFromIdListByUserName(List<int> projIds, string userName)
         {
             var projects = _db.projects.Where(p => projIds.Contains(p.projectID));
             var contacts = _db.projectUserConnectors.Where(c => projIds.Contains(c.projectId) && c.userName != userName);
@@ -113,8 +114,10 @@ namespace WebEditor.Services
                               select c.role;
             return connections.ToList();
         }
+        #endregion
 
-		public void writeNewProjectToDataBase(Project newProject, string userName)
+#region AddFunctions
+        public void writeNewProjectToDataBase(Project newProject, string userName)
 		{	// Adds newProject into table and also adds current user to that project.
 
 			if(newProject.name != null)
@@ -130,31 +133,6 @@ namespace WebEditor.Services
 			_db.files.Add(newFile);
 			_db.SaveChanges();
 		}
-
-        public bool isRegisteredUser(string userName)
-        {
-            var userEntry = _db.Users.FirstOrDefault(f => f.UserName == userName);
-            if (userEntry == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
-        public bool isAlreadyConnectedToProject(int projectID, string userName)
-        {
-            ProjectUserConnectors connection = _db.projectUserConnectors.FirstOrDefault(x => (x.projectId == projectID && x.userName == userName));
-            if (connection == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
 
         public void addUserToProject(int projectID, string userName, bool owner)
 		{
@@ -182,7 +160,9 @@ namespace WebEditor.Services
 			_db.projectUserConnectors.Add(newUserProjectConnection);
 			_db.SaveChanges();
 		}
+        #endregion
 
+#region EditFunctions
         public void updateFile(File updateFile)
         {
             var orginalFile = _db.files.Find(updateFile.fileID);
@@ -194,7 +174,21 @@ namespace WebEditor.Services
             }
         }
 
-		public bool projectIsEmpty(int projectID)
+        /// <summary>
+        /// Fallið er notað í Drop takka í ContactManager
+        /// tek inn bæði username og projectid finn færsluna í ProjectUserConnector og eyði færslunni
+        /// </summary>
+        /// <param name="projId"></param>
+        /// <param name="userName"></param>
+        public void removeUserConnection(int projId, string userName)
+        {
+            var removeUserConnection = _db.projectUserConnectors.First(c => (c.projectId == projId && c.userName == userName));
+            _db.projectUserConnectors.Remove(removeUserConnection);
+            _db.SaveChanges();
+        }
+#endregion
+
+        public bool projectIsEmpty(int projectID)
 		{
 			File tmpFile = _db.files.FirstOrDefault(x => x.projectID == projectID);
 			if(tmpFile == null)
@@ -216,26 +210,31 @@ namespace WebEditor.Services
 				return true;
 			}
 		}
-		/*
-        public ProjectViewModel getProjectById(int projectId) {
-            var project = _db.projects.SingleOrDefault(x => x.id == projectId);
 
-            if(project == null) {
-                // Err handling
-                return null;
-            }*/
-
-        /// <summary>
-        /// Fallið er notað í Drop takka í ContactManager
-        /// tek inn bæði username og projectid finn færsluna í ProjectUserConnector og eyði færslunni
-        /// </summary>
-        /// <param name="projId"></param>
-        /// <param name="userName"></param>
-        public void removeUserConnection(int projId, string userName)
+        public bool isRegisteredUser(string userName)
         {
-            var removeUserConnection = _db.projectUserConnectors.First(c => (c.projectId == projId && c.userName == userName));
-            _db.projectUserConnectors.Remove(removeUserConnection);
-            _db.SaveChanges();
+            var userEntry = _db.Users.FirstOrDefault(f => f.UserName == userName);
+            if (userEntry == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        public bool isAlreadyConnectedToProject(int projectID, string userName)
+        {
+            ProjectUserConnectors connection = _db.projectUserConnectors.FirstOrDefault(x => (x.projectId == projectID && x.userName == userName));
+            if (connection == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 	}
 }
