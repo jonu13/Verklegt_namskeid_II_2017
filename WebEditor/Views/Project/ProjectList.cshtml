@@ -2,65 +2,97 @@
 @{
     ViewBag.Title = "ProjectList";
 }
-<div class="navbar navbar-inverse navbar-fixed-top">
-	<div class="container">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			@Html.ActionLink("WebEditor", "ProjectList", "Project", new { area = "" }, new { @class = "navbar-brand" })
-		</div>
-		<div class="navbar-collapse collapse">
-			<ul class="nav navbar-nav">
-				<li>@Html.ActionLink("Projects", "ProjectList", "Project")</li>
-			</ul>
-			@Html.Partial("_LoginPartial")
-		</div>
-	</div>
-</div>
+
 
 <h2>All Projects</h2>
+
 @if (Model.projects.Count <= 0)
 {
     <h3>You have no projects yet...</h3>
-} else { 
-    <ul class="list-group">
+}
+else
+{
+    <div class="container">
         <h3>My Projects</h3>
             @for (int i = 0; i < Model.projects.Count; i++)
             {
-                if(Model.roles[i] == "owner" || Model.roles[i] == "Owner")
+                if (Model.roles[i] == "owner" || Model.roles[i] == "Owner")
                 {
-                    <li class="list-group-item">
-                        @Model.projects[i].name
-                        <ul>
-                            @for(int j = 0; j < Model.projects[i].files.Count; j++)
+                    <h4>@Model.projects[i].name</h4>
+                    <div class="row">
+                        @if(Model.projects[i].files.Count <= 0)
+                        {
+                            <div class="col-xs-2">No files in project...</div>
+                            <div class="col-xs-2">
+                                <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
+                                    <img src="~/Content/images/add.png" />
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            for (int j = 0; j < Model.projects[i].files.Count; j++)
                             {
-                                <li class="list-group-item">@Html.ActionLink(Model.projects[i].files[j].fileName, "EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)</li>
+                                <div class="col-xs-2">
+                                    <a href="@Url.Action("EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)" class="thumbnail">
+                                        <div class="caption">
+                                            <h4 class="">@Model.projects[i].files[j].fileName</h4>
+                                        </div>
+                                        <img src="~/Content/images/file.png" />
+                                    </a>
+                                </div>
                             }
-                            <li class="list-group-item">@Html.ActionLink("Create a new file", "CreateNewFile", new { projectID = Model.projects[i].projectID }, new { @class = "btn btn-primary btn-xs" })</li>
-                        </ul>
-                    </li>
+                            <div class="col-xs-2">
+                                <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
+                                    <img src="~/Content/images/add.png" />
+                                </a>
+                            </div>
+                        }
+                    </div>
                 }
             }
-            <h3>Collaborator</h3>
-            @for (int i = 0; i < Model.projects.Count; i++)
+
+        <h3>Collaborator</h3>
+        @for (int i = 0; i < Model.projects.Count; i++)
+        {
+            if (Model.roles[i] == "guest" || Model.roles[i] == "Guest")
             {
-                if (Model.roles[i] == "guest" || Model.roles[i] == "Guest")
-                {
-                    <li>
-                        @Model.projects[i].name
-                        <ul>
-                            @for (int j = 0; j < Model.projects[i].files.Count; j++)
+                <h4>@Model.projects[i].name</h4>
+                    <div class="row">
+                        @if (Model.projects[i].files.Count <= 0)
+                        {
+                            <div class="col-xs-2">No files in project...</div>
+                            <div class="col-xs-2 glyphicon-align-center">
+                                <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
+                                    <img src="~/Content/images/add.png" />
+                                </a>
+                            </div>
+                        }
+                        else
+                        {
+                            for (int j = 0; j < Model.projects[i].files.Count; j++)
                             {
-                                <li>@Html.ActionLink(Model.projects[i].files[j].fileName, "EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)</li>
+                                <div class="col-xs-2">
+                                    <a href="@Url.Action("EditFile", "Project", new { id = Model.projects[i].files[j].fileID }, null)" class="thumbnail">
+                                        <div class="caption">
+                                            <h4 class="">@Model.projects[i].files[j].fileName</h4>
+                                        </div>
+                                        <img src="~/Content/images/file.png" />
+                                    </a>
+                                </div>
                             }
-                            <li>@Html.ActionLink("Create a new file", "CreateNewFile", new { projectID = Model.projects[i].projectID })</li>
-                        </ul>
-                    </li>
-                }
+                            <div class="col-xs-2">
+                                <a href="@Url.Action("CreateNewFile", "Project", new { projectID = Model.projects[i].projectID }, null)" class="thumbnail">
+                                    <img src="~/Content/images/add.png" />
+                                </a>
+                            </div>
+                        }
+                    </div>
             }
-    </ul>
+        }
+    </div>
 }
-@Html.ActionLink("Create new project", "CreateNewProject", null, new { @class = "btn btn-primary btn-sm"})
+<br />
+<p>
+    @Html.ActionLink("Create new project", "CreateNewProject", null, new { @class = "btn btn-primary btn-sm" })
+</p>

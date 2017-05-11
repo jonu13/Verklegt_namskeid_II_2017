@@ -9,7 +9,7 @@ using WebEditor.Services;
 using WebEditor.Tests;
 using WebEditor.Models.Entities;
 
-namespace WebEditor.Tests.Services
+namespace WebEditor.Tests
 {
     [TestClass]
     class UserServiceTest

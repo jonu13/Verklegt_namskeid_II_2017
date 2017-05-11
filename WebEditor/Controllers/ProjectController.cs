@@ -13,12 +13,6 @@ namespace WebEditor.Controllers
     public class ProjectController : Controller
     {
         private ProjectService _service = new ProjectService();
-        List<File> fileList1 = new List<File>
-        {
-            new File { fileID=1, fileName="File1", content="ablabsleicanseilbf" },
-            new File { fileID=2, fileName="File2", content="asefga asef ase fase fase f" },
-            new File { fileID=3, fileName="File3", content="oesiaf joiase jfoioia sjefoiase f" }
-        };
         // GET: Project
         public ActionResult Index(int? pageIndex, string sortBy) {
             if(!pageIndex.HasValue)
@@ -34,7 +28,28 @@ namespace WebEditor.Controllers
 
             return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
         }
+        /// <summary>
+        /// nær í öll project sem current user á og 
+        /// nær í alla contacta sem að eru í þeim projectum og sendir það inn í viewið
+        /// JDP
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult ContactManager()
+        {
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var currentUser = User.Identity.Name;
+            List<int> projectIdList = _service.getProjectIdsByUserName(currentUser);
+            var viewModel = _service.getProjectsFromIdListByUserName(projectIdList, currentUser);
+            ModelState.Clear();
 
+            return View(viewModel);
+        }
+
+        [HttpGet]
         public ActionResult ProjectList() {
             if(!checkAuthentication())
                 return RedirectToAction("Login", "Account");
@@ -47,52 +62,16 @@ namespace WebEditor.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
         public ActionResult EditFile(int id) {
             if (!checkAuthentication())
-            { 
+            {
                 return RedirectToAction("Login", "Account");
             }
 
             File fileToEdit = _service.getFileById(id);
             return View(fileToEdit);
         }
-
-        [HttpPost]
-        public ActionResult SaveCode(File model)
-        {
-            _service.updateFile(model);
-            return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
-        }
-
-		[HttpGet]
-		public ActionResult CreateNewProject()
-		{
-            if (!checkAuthentication())
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            Project model = new Project();
-			model.projectFileType = "cpp";
-			return View(model);
-		}
-
-		[HttpPost]
-		public ActionResult CreateNewProject(Project model)
-		{
-			/*if(ModelState.IsValid)
-			{
-				_service.writeNewProjectToDataBase(model);
-				return RedirectToAction("ProjectList");
-			}*/
-			_service.writeNewProjectToDataBase(model, User.Identity.Name);
-			return RedirectToAction("ProjectList");
-			//return View(model);
-		}
-
-		public bool projectIsEmpty(int projectID)
-		{ 
-			return _service.projectIsEmpty(projectID);
-		}
 
 		[HttpGet]
 		public ActionResult CreateNewFile(int projectID)
@@ -112,7 +91,7 @@ namespace WebEditor.Controllers
 			model.content = "";
 			model.projectID = projectID;
 			model.fileType = projectFileType;
-			
+
 			if (projectIsEmpty(projectID))
 			{   // First file in project shall be index.someFileType
 
@@ -127,21 +106,89 @@ namespace WebEditor.Controllers
 			}
 		}
 
+		[HttpGet]
+		public ActionResult CreateNewProject()
+		{
+            if (!checkAuthentication())
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            Project model = new Project();
+			model.projectFileType = "cpp";
+			return View(model);
+		}
+
+        [HttpPost]
+        public ActionResult SaveCode(File model)
+        {
+            _service.updateFile(model);
+            return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn
+        }
+
+		[HttpPost]
+		public ActionResult CreateNewProject(Project model)
+		{
+			/*if(ModelState.IsValid)
+			{
+				_service.writeNewProjectToDataBase(model);
+				return RedirectToAction("ProjectList");
+			}*/
+			_service.writeNewProjectToDataBase(model, User.Identity.Name);
+			return RedirectToAction("ProjectList");
+			//return View(model);
+		}
+
 		[HttpPost]
 		public ActionResult CreateNewFile(File model)
 		{
 			model.content = ""; // Because "" doesnt survive the view class.
 			model.fileName = model.fileName + "." + model.fileType;
-			_service.WriteNewFileToDataBase(model);
+			if(!_service.projectAlreadyHasFileName(model.fileName, model.projectID))
+			{
+				_service.WriteNewFileToDataBase(model);
+			}
 			return RedirectToAction("ProjectList");
+		}
+
+        /// <summary>
+        /// eyðum contact úr projecti með því að ýta á drop takka inn í contact manager
+        /// JDP
+        /// </summary>
+        /// <param name="projId"> Id af projectinum sem á að losa úr</param>
+        /// <param name="userName"> userinn sem á að losa sig við</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult DropUserFromProject(int projId, string userName)
+        {
+            _service.removeUserConnection(projId, userName);
+            return RedirectToAction("ContactManager");
+        }
+
+        /// <summary>
+        /// bæti við user í project í contact managernum og endurhleð síðuna síðan
+        /// JDP
+        /// vantar leið til að tékka hvort userinn sem sendur inn er til yfir höfuð og senda viðeigandi error message
+        /// </summary>
+        /// <param name="projId">id af projecti sem á að bæta í</param>
+        /// <param name="userName"> userinn sem á að bæta við</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult AddUserToProject(int projId, string userName)
+        {
+            _service.addUserToProject(projId, userName, false);
+            return RedirectToAction("ContactManager");
+        }
+
+		public bool projectIsEmpty(int projectID)
+		{
+			return _service.projectIsEmpty(projectID);
 		}
 
         private bool checkAuthentication()
         {
-            if (User.Identity.IsAuthenticated) 
+            if (User.Identity.IsAuthenticated)
                 return true;
             return false;
         }
-	}
-
+    }
 }

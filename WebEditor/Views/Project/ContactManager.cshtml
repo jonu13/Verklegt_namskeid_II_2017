@@ -1,0 +1,136 @@
+﻿@model WebEditor.Models.ViewModels.ContactViewModel
+@{
+    ViewBag.Title = "ContactManager";
+}
+
+<h2>Contact Manager</h2>
+
+<div class="container"><h2>My Contacts</h2></div>
+<div id="tabs" class="container">
+    <ul class="nav nav-pills">
+        @{
+            int count = 0;
+            foreach (var project in Model.projects)
+            {
+                if (project.projectID == Model.projects.First().projectID)
+                {
+                    <li class="active"><a href="#@count" data-toggle="tab" role="tab">@project.name</a></li>
+                }
+                else
+                {
+                    <li><a href="#@count" data-toggle="tab" role="tab">@project.name</a></li>
+                }
+                count++;
+            }
+        }
+    </ul> 
+
+    <div class="tab-content clearfix">
+        @{
+        int count2 = 0; 
+        foreach(var project in Model.projects)
+        {
+            if (project.projectID == Model.projects.First().projectID)
+            {
+                <div class="tab-pane active" id=@count2>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                User email
+                            </th>
+                            <th>
+                                Drop user from project
+                            </th>
+                        </tr>
+                        @foreach(var connector in Model.contacts)
+                        {
+                            if(connector.projectId == project.projectID){ }
+                            else
+                            {
+                                continue;
+                            }
+                                <tr>
+                                    <td>
+                                        @connector.userName
+                                    </td>
+                                    <td>
+                                        @using (Html.BeginForm("DropUserFromProject", "Project", FormMethod.Post))
+                                        {
+                                            <input type="hidden" name="projId" value="@project.projectID"/>
+                                            <input type="hidden" name="userName" value="@connector.userName"/>
+                                            <input type="submit" value="Drop" class="btn btn-default">
+                                        } 
+                                    </td>
+                                </tr>         
+                            }
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="tab-pane" id=@count2>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    User email
+                                </th>
+                                <th>
+                                    Drop user from project
+                                </th>
+                            </tr>
+                        @foreach (var connector in Model.contacts)
+                        {
+                            if (connector.projectId == project.projectID) { }
+                            else
+                            {
+                                continue;
+                            }
+                            <tr>
+                                <td>
+                                    @connector.userName
+                                </td>
+                                <td>
+                                    @using (Html.BeginForm("DropUserFromProject", "Project", FormMethod.Post))
+                                    {
+                                        <input type="hidden" name="projId" value="@project.projectID" />
+                                        <input type="hidden" name="userName" value="connector.userName"/>
+                                        <input type="submit" value="Drop" class="btn btn-default">
+                                    }                              
+                                </td>
+                            </tr>
+                        }
+                        </table>
+                    </div>
+                 }
+                count2++;
+            }
+        }
+    </div>
+</div>
+
+<div class="container"><h3>Add contacts to project</h3></div>
+<hr>
+<div id="Search" class="container">
+    <div class="form-horizontal">
+        @using (Html.BeginForm("AddUserToProject", "Project", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label for="userName" class="col-md-2">Email:</label>
+                <input type="text" name="userName" id="useName" class="btn btn-default"/>
+            </div>
+            <div class="form-group">
+                <label for="Projects" class="col-md-2">Select project:</label>
+                <select class="form-control" name="projId" id="Projects">
+                @foreach(var project in Model.projects)
+                {
+                    <option value="@project.projectID">@project.name</option>
+                }
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add contact" class="btn btn-default">
+            </div>
+        }
+    </div>
+</div>
+       
