@@ -65,7 +65,6 @@
     <Compile Include="inMemoryDbSet.cs" />
     <Compile Include="MockDatabase.cs" />
     <Compile Include="Services\ProjectServiceTest.cs" />
-    <Compile Include="Services\UserServiceTest.cs" />
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
