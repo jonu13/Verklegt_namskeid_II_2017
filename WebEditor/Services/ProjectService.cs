@@ -19,10 +19,11 @@ namespace WebEditor.Services
         }
 
         private ApplicationDbContext _db;
-        public ProjectService() {
+        public ProjectService()
+        {
             _db = new ApplicationDbContext();
         }
-#endregion
+        #endregion
 
         #region Get functions
         /// <summary>
@@ -30,7 +31,8 @@ namespace WebEditor.Services
         /// JÞ
         /// </summary>
         /// <returns></returns>
-        public List<Project> getAllProjects() {
+        public List<Project> getAllProjects()
+        {
             return _db.projects.ToList();
         }
 
@@ -56,8 +58,8 @@ namespace WebEditor.Services
         private List<File> getFilesByProjectId(int id)
         {
             var filesById = from f in _db.files
-                                   where f.projectID == id
-                                   select f;
+                            where f.projectID == id
+                            select f;
             return filesById.ToList();
         }
 
@@ -112,7 +114,7 @@ namespace WebEditor.Services
         public ContactViewModel getProjectsFromIdListByUserName(List<int> projIds, string userName)
         {
             var projects = _db.projects.Where(p => projIds.Contains(p.projectID));
-            var contacts = _db.projectUserConnectors.Where(c => projIds.Contains(c.projectId) );
+            var contacts = _db.projectUserConnectors.Where(c => projIds.Contains(c.projectId));
 
             ContactViewModel viewModel = new ContactViewModel
             {
@@ -168,7 +170,7 @@ namespace WebEditor.Services
         /// <param name="userName"></param>
         /// <param name="owner"></param>
         public void addUserToProject(int projectID, string userName, bool owner)
-		{
+        {
             //checkes if the user is part of the database
             if (!isRegisteredUser(userName))
             {
@@ -180,23 +182,23 @@ namespace WebEditor.Services
                 return;
             }
             ProjectUserConnectors newUserProjectConnection = new ProjectUserConnectors();
-			newUserProjectConnection.projectId = projectID;
-			newUserProjectConnection.userName = userName;
+            newUserProjectConnection.projectId = projectID;
+            newUserProjectConnection.userName = userName;
 
             //sets the role of newly added user depending on the value of the owner variable
-			if(owner == true)
-			{
-				newUserProjectConnection.role = "owner";
-			}
-			else
-			{
-				newUserProjectConnection.role = "guest";
-			}
-			newUserProjectConnection.userId = null;
+            if (owner == true)
+            {
+                newUserProjectConnection.role = "owner";
+            }
+            else
+            {
+                newUserProjectConnection.role = "guest";
+            }
+            newUserProjectConnection.userId = null;
 
-			_db.projectUserConnectors.Add(newUserProjectConnection);
-			_db.SaveChanges();
-		}
+            _db.projectUserConnectors.Add(newUserProjectConnection);
+            _db.SaveChanges();
+        }
 
         /// <summary>
         /// Add a file to the database 
@@ -204,10 +206,10 @@ namespace WebEditor.Services
         /// </summary>
         /// <param name="newFile"></param>
 		public void writeNewFileToDatabase(File newFile)
-		{
-			_db.files.Add(newFile);
-			_db.SaveChanges();
-		}
+        {
+            _db.files.Add(newFile);
+            _db.SaveChanges();
+        }
 
         /// <summary>
         /// Adds newProject into table and also adds current user to that project.
@@ -237,7 +239,7 @@ namespace WebEditor.Services
         {
             var orginalFile = _db.files.Find(updateFile.fileID);
 
-            if(orginalFile != null)
+            if (orginalFile != null)
             {
                 _db.Entry(orginalFile).CurrentValues.SetValues(updateFile);
                 _db.SaveChanges();
@@ -282,17 +284,17 @@ namespace WebEditor.Services
         /// <param name="projectID"></param>
         /// <returns></returns>
 		public bool projectAlreadyHasFileName(string fileName, int projectID)
-		{
-			File fileInDB = _db.files.FirstOrDefault(x => (x.fileName == fileName && x.projectID == projectID));
-			if(fileInDB == null)
-			{
-				return false;
-			}
-			else
-			{
-				return true;
-			}
-		}
+        {
+            File fileInDB = _db.files.FirstOrDefault(x => (x.fileName == fileName && x.projectID == projectID));
+            if (fileInDB == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         /// <summary>
         /// checks if inputed project is empty
@@ -301,14 +303,14 @@ namespace WebEditor.Services
         /// <param name="projectID"></param>
         /// <returns></returns>
         public bool projectIsEmpty(int projectID)
-		{
-			File tmpFile = _db.files.FirstOrDefault(x => x.projectID == projectID);
-			if(tmpFile == null)
-			{
-				return true;
-			}
-			return false;
-		}
+        {
+            File tmpFile = _db.files.FirstOrDefault(x => x.projectID == projectID);
+            if (tmpFile == null)
+            {
+                return true;
+            }
+            return false;
+        }
 
         /// <summary>
         /// checks if the user that is sent in is already part of a 
@@ -349,6 +351,6 @@ namespace WebEditor.Services
                 return true;
             }
         }
-#endregion
+        #endregion
     }
 }

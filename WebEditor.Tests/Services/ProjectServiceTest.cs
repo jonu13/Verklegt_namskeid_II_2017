@@ -12,7 +12,7 @@ using WebEditor.Models.Entities;
 namespace WebEditor.Tests
 {
     [TestClass]
-    class ProjectServiceTest
+    public class ProjectServiceTest
     {
         private ProjectService _service;
 

@@ -35,6 +35,7 @@
     var codeHub = $.connection.codeHub;
     var silent = false;
     var code = editor.getValue();
+    editor.getSession().setMode("ace/mode/js");
 
     codeHub.client.onChange = function (changeData) {
         console.log(changeData);
