@@ -11,23 +11,10 @@ using WebEditor.Models;
 namespace WebEditor.Controllers
 {
     public class ProjectController : Controller
-    {
+    {   
+        //Nær í service klasann okkar
         private ProjectService _service = new ProjectService();
-        // GET: Project
-        public ActionResult Index(int? pageIndex, string sortBy) {
-            if(!pageIndex.HasValue)
-            {
-                pageIndex = 1;
-            }
-
-            if(String.IsNullOrWhiteSpace(sortBy))
-            {
-                sortBy = "Name";
-            }
-            var diff = User.Identity.Name;
-
-            return Content(String.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
-        }
+ 
 #region GoToView
         /// <summary>
         /// nær í öll project sem current user á og 
@@ -97,7 +84,7 @@ namespace WebEditor.Controllers
 			{   // First file in project shall be index.someFileType
 
 				model.fileName = "index." + projectFileType;
-				_service.WriteNewFileToDataBase(model);
+				_service.writeNewFileToDataBase(model);
 				return RedirectToAction("ProjectList");
 			}
 			else
@@ -129,7 +116,7 @@ namespace WebEditor.Controllers
         }
 
 		[HttpPost]
-		public ActionResult CreateNewProject(Project model)
+		public ActionResult CreateNewProject(Project model) // Fallið þarf að hafa stóran staf útaf því að hvernig er kallað í það í viewinu
 		{
 			/*if(ModelState.IsValid)
 			{
@@ -142,13 +129,13 @@ namespace WebEditor.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult CreateNewFile(File model)
-		{
+		public ActionResult CreateNewFile(File model)   // Fallið þarf að hafa stóran staf útaf því að hvernig er kallað í það í viewinu
+        {
 			model.content = ""; // Because "" doesnt survive the view class.
 			model.fileName = model.fileName + "." + model.fileType;
 			if(!_service.projectAlreadyHasFileName(model.fileName, model.projectID))
 			{
-				_service.WriteNewFileToDataBase(model);
+				_service.writeNewFileToDataBase(model);
 			}
 			return RedirectToAction("ProjectList");
 		}
@@ -161,7 +148,7 @@ namespace WebEditor.Controllers
         /// <param name="userName"> userinn sem á að losa sig við</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult DropUserFromProject(int projId, string userName)
+        public ActionResult dropUserFromProject(int projId, string userName)
         {
             _service.removeUserConnection(projId, userName);
             return RedirectToAction("ContactManager");
@@ -176,7 +163,7 @@ namespace WebEditor.Controllers
         /// <param name="userName"> userinn sem á að bæta við</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult AddUserToProject(int projId, string userName)
+        public ActionResult addUserToProject(int projId, string userName)
         {
             _service.addUserToProject(projId, userName, false);
             return RedirectToAction("ContactManager");

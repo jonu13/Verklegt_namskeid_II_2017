@@ -267,9 +267,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -295,7 +292,6 @@
     <Content Include="Views\Project\CreateNewProject.cshtml" />
     <Content Include="Views\Project\CreateNewFile.cshtml" />
     <Content Include="Views\Project\ContactManager.cshtml" />
-    <Content Include="Views\Shared\ContactManagerPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="3rdparty\ace\" />

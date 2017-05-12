@@ -54,7 +54,7 @@
                                         @connector.userName
                                     </td>
                                     <td>
-                                        @using (Html.BeginForm("DropUserFromProject", "Project", FormMethod.Post))
+                                        @using (Html.BeginForm("dropUserFromProject", "Project", FormMethod.Post))
                                         {
                                             <input type="hidden" name="projId" value="@project.projectID"/>
                                             <input type="hidden" name="userName" value="@connector.userName"/>
@@ -90,10 +90,10 @@
                                     @connector.userName
                                 </td>
                                 <td>
-                                    @using (Html.BeginForm("DropUserFromProject", "Project", FormMethod.Post))
+                                    @using (Html.BeginForm("dropUserFromProject", "Project", FormMethod.Post))
                                     {
                                         <input type="hidden" name="projId" value="@project.projectID" />
-                                        <input type="hidden" name="userName" value="connector.userName"/>
+                                        <input type="hidden" name="userName" value="@connector.userName"/>
                                         <input type="submit" value="Drop" class="btn btn-default">
                                     }                              
                                 </td>
@@ -112,7 +112,7 @@
 <hr>
 <div id="Search" class="container">
     <div class="form-horizontal">
-        @using (Html.BeginForm("AddUserToProject", "Project", FormMethod.Post))
+        @using (Html.BeginForm("addUserToProject", "Project", FormMethod.Post))
         {
             <div class="form-group">
                 <label for="userName" class="col-md-2">Email:</label>
