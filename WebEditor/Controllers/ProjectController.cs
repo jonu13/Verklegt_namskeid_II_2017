@@ -192,7 +192,7 @@ namespace WebEditor.Controllers
         }
 
         [HttpPost]
-        public ActionResult SaveCodgetRolesWithProjecListe(File model)
+        public ActionResult SaveCode(File model)
         {
             _service.updateFile(model);
             return View("EditFile", model); //Virkar ekki, þarf að senda model upplýsingarnar með í gegn

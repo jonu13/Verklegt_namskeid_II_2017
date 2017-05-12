@@ -5,16 +5,14 @@
 
 <h2>FileName: @Model.fileName</h2>
 
-<div id="editor">
-    @Model.content
-</div>
+<div id="editor">@Model.content</div>
 
 @using (Html.BeginForm("SaveCode", "Project", FormMethod.Post))
 {
     @Html.HiddenFor(m => m.content, new { @id = "hidden_editor" })
     @Html.HiddenFor(m => m.fileID, new { @id = "hidden_editor" })
     @Html.HiddenFor(m => m.fileName, new { @id = "hidden_editor" })
-    @Html.HiddenFor(m => m.fileType, new { @id = "hidden_editor"})
+    @Html.HiddenFor(m => m.fileType, new { @id = "hidden_editor" })
     @Html.HiddenFor(m => m.projectID, new { @id = "hidden_editor" })
     <input type="submit" value="Save code" />
 
@@ -22,20 +20,20 @@
 
 @section scripts
 {
-<script src="~/3rdparty/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="~/Scripts/jquery.signalR-2.2.2.js"></script>
-<script src="~/signalr/hubs"></script>    
-<script>
+    <script src="~/3rdparty/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.2.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
     var documentID = @Model.fileID;
 
     var editor = ace.edit("editor");
+    editor.getSession().setMode("ace/mode/c_cpp");
     $("form").submit(function () {
         $("#hidden_editor").val(editor.getSession().getValue());
     });
     var codeHub = $.connection.codeHub;
     var silent = false;
     var code = editor.getValue();
-    editor.getSession().setMode("ace/mode/js");
 
     codeHub.client.onChange = function (changeData) {
         console.log(changeData);
@@ -48,7 +46,6 @@
     $.connection.hub.start().done(function () {
 
         codeHub.server.joinDocument(documentID);
-
         editor.on("change", function(obj){
             if(silent){
                 return;
@@ -60,5 +57,5 @@
         });
     });
 
-</script>
+    </script>
 }
