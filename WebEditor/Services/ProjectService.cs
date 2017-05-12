@@ -144,32 +144,6 @@ namespace WebEditor.Services
             }
             return roleList;
         }
-       
-        public void writeNewProjectToDataBase(Project newProject, string userName)
-		{	// Adds newProject into table and also adds current user to that project.
-
-			if(newProject.name != null)
-			{
-				_db.projects.Add(newProject);
-				_db.SaveChanges();
-
-                createFirstFile(newProject);
-				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
-			}
-		}
-
-        public void createFirstFile(Project newProject)
-        {
-            Project currProject = searchProjectByName(newProject.name);
-            File indexFile = new File();
-
-            indexFile.fileName = "index." + currProject.projectFileType;
-            indexFile.fileType = newProject.projectFileType;
-            indexFile.content = "";
-            indexFile.projectID = currProject.projectID;
-
-            WriteNewFileToDataBase(indexFile);
-        }
 
         public Project searchProjectByName(string projectName)
         {
@@ -247,7 +221,8 @@ namespace WebEditor.Services
 			{
 				_db.projects.Add(newProject);
 				_db.SaveChanges();
-				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
+                createFirstFile(newProject);
+                addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
 			}
 		}
         #endregion
@@ -285,6 +260,20 @@ namespace WebEditor.Services
         #endregion
 
         #region Helper functions
+
+        private void createFirstFile(Project newProject)
+        {
+            Project currProject = searchProjectByName(newProject.name); // Sæki nýja projectið  úr db til þess að fá rétt id
+            File indexFile = new File();
+
+            indexFile.fileName = "index." + currProject.projectFileType;
+            indexFile.fileType = newProject.projectFileType;
+            indexFile.content = "";
+            indexFile.projectID = currProject.projectID;
+
+            WriteNewFileToDataBase(indexFile);
+        }
+
         /// <summary>
         /// checks if the project already has a file that has the same name as was inputed
         /// JHU
