@@ -28,6 +28,7 @@ namespace WebEditor.Controllers
             SignInManager = signInManager;
         }
 
+   
         public ApplicationSignInManager SignInManager
         {
             get

@@ -34,7 +34,7 @@ namespace WebEditor.Services
             return projectsIds.ToList();
         }
 
-        public List<int> getProjectIdsByUserName(string userName)
+        public List<int> getProjectIdsByUserName(string userName)   
         {
             var projectsIds = from p in _db.projectUserConnectors
                               where p.userName == userName
@@ -125,9 +125,31 @@ namespace WebEditor.Services
 			{
 				_db.projects.Add(newProject);
 				_db.SaveChanges();
+
+                createFirstFile(newProject);
 				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
 			}
 		}
+
+        public void createFirstFile(Project newProject)
+        {
+            Project currProject = searchProjectByName(newProject.name);
+            File indexFile = new File();
+
+            indexFile.fileName = "index." + currProject.projectFileType;
+            indexFile.fileType = newProject.projectFileType;
+            indexFile.content = "";
+            indexFile.projectID = currProject.projectID;
+
+            WriteNewFileToDataBase(indexFile);
+        }
+
+        public Project searchProjectByName(string projectName)
+        {
+            var project = _db.projects.First(p => p.name == projectName);
+
+            return project;
+        }
 
 		public void WriteNewFileToDataBase(File newFile)
 		{

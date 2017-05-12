@@ -145,8 +145,10 @@ namespace WebEditor.Controllers
 		public ActionResult CreateNewFile(File model)
 		{
 			model.content = ""; // Because "" doesnt survive the view class.
-			model.fileName = model.fileName + "." + model.fileType;
-			if(!_service.projectAlreadyHasFileName(model.fileName, model.projectID))
+
+            model.fileName = model.fileName + "." + model.fileType;
+
+            if (!_service.projectAlreadyHasFileName(model.fileName, model.projectID))
 			{
 				_service.WriteNewFileToDataBase(model);
 			}
