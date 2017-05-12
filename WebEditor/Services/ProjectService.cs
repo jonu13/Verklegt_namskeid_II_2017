@@ -145,6 +145,7 @@ namespace WebEditor.Services
             return roleList;
         }
         #endregion
+
         #region Add to database
         /// <summary>
         /// Adds a inputed user to the inputed project and set his role in the project
