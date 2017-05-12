@@ -35,6 +35,33 @@ namespace WebEditor.Services
         }
 
         /// <summary>
+        /// Get a file that has the inputed id
+        /// JÞ
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public File getFileById(int id)
+        {
+            var file = _db.files.First(f => f.fileID == id);
+
+            return file;
+        }
+
+        /// <summary>
+        /// Gets all files that have the inputed project Id
+        /// JÞ
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private List<File> getFilesByProjectId(int id)
+        {
+            var filesById = from f in _db.files
+                                   where f.projectID == id
+                                   select f;
+            return filesById.ToList();
+        }
+
+        /// <summary>
         /// Gets all projects that a specific ueser is a part of
         /// JÞ
         /// </summary>
@@ -76,24 +103,6 @@ namespace WebEditor.Services
         }
 
         /// <summary>
-        /// Get the roles a specific user has in his project
-        /// JÞ
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="projects"></param>
-        /// <returns></returns>
-        private List<string> getRolesWithProjectList(string userName, List<Project> projects)
-        {
-            var roleList = new List<string>();
-            foreach (var pro in projects)
-            {
-                var curRole = _db.projectUserConnectors.First(r => r.userName == userName && r.projectId == pro.projectID);
-                roleList.Add(curRole.role);
-            }
-            return roleList;
-        }
-
-        /// <summary>
         /// Fills the ContactViewModel of all the contacts that are conected 
         /// to the project Ids that the current user owns
         /// JDP
@@ -119,61 +128,24 @@ namespace WebEditor.Services
         }
 
         /// <summary>
-        /// Gets all files that have the inputed project Id
+        /// Get the roles a specific user has in his project
         /// JÞ
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="userName"></param>
+        /// <param name="projects"></param>
         /// <returns></returns>
-        public List<File> getFilesByProjectId(int id)
+        private List<string> getRolesWithProjectList(string userName, List<Project> projects)
         {
-            var filesById = from f in _db.files
-                                   where f.projectID == id
-                                   select f;
-            return filesById.ToList();
-        }
-
-        /// <summary>
-        /// Get a file that has the inputed id
-        /// JÞ
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public File getFileById(int id)
-        {
-            var file = _db.files.First(f => f.fileID == id);
-
-            return file;
+            var roleList = new List<string>();
+            foreach (var pro in projects)
+            {
+                var curRole = _db.projectUserConnectors.First(r => r.userName == userName && r.projectId == pro.projectID);
+                roleList.Add(curRole.role);
+            }
+            return roleList;
         }
         #endregion
-
         #region Add to database
-        /// <summary>
-        /// Adds newProject into table and also adds current user to that project.
-        /// JHU
-        /// </summary>
-        /// <param name="newProject"></param>
-        /// <param name="userName"></param>
-        public void writeNewProjectToDataBase(Project newProject, string userName)
-		{
-			if(newProject.name != null)
-			{
-				_db.projects.Add(newProject);
-				_db.SaveChanges();
-				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
-			}
-		}
-
-        /// <summary>
-        /// Add a file to the database 
-        /// JHU
-        /// </summary>
-        /// <param name="newFile"></param>
-		public void writeNewFileToDataBase(File newFile)
-		{
-			_db.files.Add(newFile);
-			_db.SaveChanges();
-		}
-
         /// <summary>
         /// Adds a inputed user to the inputed project and set his role in the project
         /// JDP
@@ -211,6 +183,33 @@ namespace WebEditor.Services
 			_db.projectUserConnectors.Add(newUserProjectConnection);
 			_db.SaveChanges();
 		}
+
+        /// <summary>
+        /// Add a file to the database 
+        /// JHU
+        /// </summary>
+        /// <param name="newFile"></param>
+		public void writeNewFileToDatabase(File newFile)
+		{
+			_db.files.Add(newFile);
+			_db.SaveChanges();
+		}
+
+        /// <summary>
+        /// Adds newProject into table and also adds current user to that project.
+        /// JHU
+        /// </summary>
+        /// <param name="newProject"></param>
+        /// <param name="userName"></param>
+        public void writeNewProjectToDatabase(Project newProject, string userName)
+		{
+			if(newProject.name != null)
+			{
+				_db.projects.Add(newProject);
+				_db.SaveChanges();
+				addUserToProject((_db.projects.SingleOrDefault(x => x.name == newProject.name)).projectID, userName, true);
+			}
+		}
         #endregion
 
         #region Edit database
@@ -247,22 +246,6 @@ namespace WebEditor.Services
 
         #region Helper functions
         /// <summary>
-        /// checks if inputed project is empty
-        /// JHU
-        /// </summary>
-        /// <param name="projectID"></param>
-        /// <returns></returns>
-        public bool projectIsEmpty(int projectID)
-		{
-			File tmpFile = _db.files.FirstOrDefault(x => x.projectID == projectID);
-			if(tmpFile == null)
-			{
-				return true;
-			}
-			return false;
-		}
-
-        /// <summary>
         /// checks if the project already has a file that has the same name as was inputed
         /// JHU
         /// </summary>
@@ -283,23 +266,20 @@ namespace WebEditor.Services
 		}
 
         /// <summary>
-        /// checks if the user that is sent in is part of the database
+        /// checks if inputed project is empty
         /// JHU
         /// </summary>
-        /// <param name="userName"></param>
+        /// <param name="projectID"></param>
         /// <returns></returns>
-        private bool isRegisteredUser(string userName)
-        {
-            var userEntry = _db.Users.FirstOrDefault(f => f.UserName == userName);
-            if (userEntry == null)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }
+        public bool projectIsEmpty(int projectID)
+		{
+			File tmpFile = _db.files.FirstOrDefault(x => x.projectID == projectID);
+			if(tmpFile == null)
+			{
+				return true;
+			}
+			return false;
+		}
 
         /// <summary>
         /// checks if the user that is sent in is already part of a 
@@ -313,6 +293,25 @@ namespace WebEditor.Services
         {
             ProjectUserConnectors connection = _db.projectUserConnectors.FirstOrDefault(x => (x.projectId == projectID && x.userName == userName));
             if (connection == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
+        /// checks if the user that is sent in is part of the database
+        /// JHU
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        private bool isRegisteredUser(string userName)
+        {
+            var userEntry = _db.Users.FirstOrDefault(f => f.UserName == userName);
+            if (userEntry == null)
             {
                 return false;
             }
